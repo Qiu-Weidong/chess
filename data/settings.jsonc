@@ -1,0 +1,8 @@
+{
+    // 相关配置
+    "padding-left": 30,
+    "padding-top": 30,
+    "stone-radius": 46,
+    // 备选项 ... 
+    "background": "url"
+}

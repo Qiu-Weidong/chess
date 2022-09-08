@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+# ide相关
+.idea
+.vscode
+build

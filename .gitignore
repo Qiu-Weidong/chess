@@ -35,3 +35,6 @@
 .idea
 .vscode
 build
+
+src/rapidjson
+resource/raw

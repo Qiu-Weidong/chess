@@ -38,7 +38,8 @@ struct Settings {
 
     void loadFromFile(std::ifstream &in);
     static Settings &getInstance() {
-        return p_settings_ ? *p_settings_ : *(new Settings());
+        if(p_settings_ == nullptr) p_settings_ = new Settings();
+        return *p_settings_;
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Settings &settings) {

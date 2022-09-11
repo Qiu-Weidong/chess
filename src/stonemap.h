@@ -38,6 +38,8 @@ public:
     }
 
     friend sf::RenderTarget &operator<<(sf::RenderTarget &target, const StoneMap &stone_map) {
+        target.draw(stone_map.board_background_);
+        target.draw(stone_map.board_);
         for(int i=0; i<stone_cnt_; i++) {
             if(stone_map.stones_[i].alive_)
             {target.draw(stone_map.stones_[i].background_);

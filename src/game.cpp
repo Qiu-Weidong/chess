@@ -126,8 +126,7 @@ sf::Texture &Game::getTexture(const std::string &url)
     if (it != textures_.end())
         return it->second;
     sf::Texture &texture = textures_[url];
-    // assert(texture.loadFromFile(url));
-    texture.loadFromFile(url);
+    assert(texture.loadFromFile(url));
     return texture;
 }
 
@@ -148,14 +147,6 @@ void Game::render()
     window_ << stone_map_;
     window_.display();
 }
-
-
-// 初始化函数
-// void Game::initWindow(rapidjson::Document & document)
-// {
-//     // 先给出一些默认值
-//     int padding_left = 30, padding_top = 30, padding_right=30, padding_bottom=30, stone_radius=46;
-
 
 Game::Game() {
     Settings &settings = Settings::getInstance();
@@ -188,5 +179,5 @@ Game::Game() {
         stone_map_[i].text_.setTexture(stone_text);
     }
 
-    stone_map_.init();
+    // stone_map_.init();
 }

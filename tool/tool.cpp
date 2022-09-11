@@ -181,3 +181,23 @@ int main(int argc, const char **argv)
 // }
 
 
+    // sf::Image img;
+    // img.loadFromFile("./resource/raw/jinwen.png");
+
+    // int x = img.getSize().x;
+    // int y = img.getSize().y;
+
+    // for(int i=0; i<x; i++) {
+    //     for(int j=0; j<y; j++) {
+    //         int t = img.getPixel(i, j).toInteger();
+    //         if(t > 0) {
+    //             img.setPixel(i, j, sf::Color::White);
+    //         }
+    //         else {
+    //             img.setPixel(i, j, sf::Color::Transparent);
+    //         }
+    //     }
+    // }
+    // // img.createMaskFromColor(sf::Color::White);
+
+    // img.saveToFile("./resource/jinwen.png");

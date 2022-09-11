@@ -1,86 +1,158 @@
 {
-    "padding-left": 30,
-    "padding-top": 30,
-    "padding-right": 30,
-    "padding-bottom": 30,
-    "stone-radius": 46,
-    "window-positon": { "left": 340, "top": 5 },
-    "board-img": "board.png",
-    "board-background": "bg/bg.jpg",
-    
-    "stone-texture": "stone-texture/aerial_wood_snips.png",
-
-    "stone-text": "kaiti",
-    
+    "padding": {
+        "left": 30,
+        "right": 30,
+        "top": 30,
+        "bottom": 30
+    },
+    "window-positon": {
+        "left": 340,
+        "top": 5
+    },
+    "board": {
+        "img":"board.png",
+        "background": "bg/bg.jpg"
+    },
+    "stone": {
+        "background": "stone-texture/aerial_wood_snips.png",
+        "text": "xiaozhuan",
+        "radius": 46
+    },
+    "choosen-color": "red",
     "title": "中国象棋对战",
+    "icon-url":"圖標地址",
     "img-dir": "./resource/img/",
     "jinwen": {
         "url": "stone-text/jinwen.png",
         "scale": 0.60,
-        "red": {
-            "king": { "left": 121, "top": 157, "width": 121, "height": 157 },
-            "mandarin" : {"left": 363, "top": 157, "width": 121, "height": 157},
-            "bishop": {"left": 605, "top": 157, "width": 121, "height": 157},
-            "knight": {"left": 726, "top": 157, "width": 121, "height": 157},
-            "rook": {"left": 847, "top": 157, "width": 121, "height": 157},
-            "cannon": {"left": 1210, "top": 157, "width": 121, "height": 157},
-            "pawn": {"left": 1452, "top": 157, "width": 121, "height": 157}
-        },
-        "black": {
-            "king": { "left": 0, "top": 157, "width": 121, "height": 157 },
-            "mandarin" : {"left": 242, "top": 157, "width": 121, "height": 157},
-            "bishop": {"left": 484, "top": 157, "width": 121, "height": 157},
-            "knight": {"left": 726, "top": 157, "width": 121, "height": 157},
-            "rook": {"left": 847, "top": 157, "width": 121, "height": 157},
-            "cannon": {"left": 1210, "top": 157, "width": 121, "height": 157},
-            "pawn": {"left": 1573, "top": 157, "width": 121, "height": 157}
-        }
+        "char-width": 121,
+        "char-height": 125,
+        "red-king-index": 0,
+        "red-mandarin-index": 3,
+        "red-bishop-index": 4,
+        "red-knight-index": 6,
+        "red-rook-index": 7,
+        "red-cannon-index": 8,
+        "red-pawn-index": 9,
+        "black-king-index": 1,
+        "black-mandarin-index": 2,
+        "black-bishop-index": 5,
+        "black-knight-index": 6,
+        "black-rook-index": 7,
+        "black-cannon-index": 8,
+        "black-pawn-index": 10
     },
     "xiaozhuan": {
         "url": "stone-text/xiaozhuan.png",
         "scale": 0.60,
-        "red": {
-            "king": { "left": 121, "top": 0, "width": 121, "height": 157 },
-            "mandarin" : {"left": 363, "top": 0, "width": 121, "height": 157},
-            "bishop": {"left": 605, "top": 0, "width": 121, "height": 157},
-            "knight": {"left": 726, "top": 0, "width": 121, "height": 157},
-            "rook": {"left": 847, "top": 0, "width": 121, "height": 157},
-            "cannon": {"left": 1210, "top": 0, "width": 121, "height": 157},
-            "pawn": {"left": 1452, "top": 0, "width": 121, "height": 157}
-        },
-        "black": {
-            "king": { "left": 0, "top": 0, "width": 121, "height": 157 },
-            "mandarin" : {"left": 242, "top": 0, "width": 121, "height": 157},
-            "bishop": {"left": 484, "top": 0, "width": 121, "height": 157},
-            "knight": {"left": 726, "top": 0, "width": 121, "height": 157},
-            "rook": {"left": 847, "top": 0, "width": 121, "height": 157},
-            "cannon": {"left": 1210, "top": 0, "width": 121, "height": 157},
-            "pawn": {"left": 1573, "top": 0, "width": 121, "height": 157}
-        }
+        "char-width": 121,
+        "char-height": 122,
+        "red-king-index": 1,
+        "red-mandarin-index": 2,
+        "red-bishop-index": 4,
+        "red-knight-index": 6,
+        "red-rook-index": 9,
+        "red-cannon-index": 11,
+        "red-pawn-index": 12,
+
+        "black-king-index": 0,
+        "black-mandarin-index": 3,
+        "black-bishop-index": 5,
+        "black-knight-index": 7,
+        "black-rook-index": 8,
+        "black-cannon-index": 10,
+        "black-pawn-index": 13
     },
     "kaiti": {
         "url": "stone-text/kaiti.png",
         "scale": 0.60,
         "red": {
-            "king": { "left": 121, "top": 0, "width": 121, "height": 157 },
-            "mandarin" : {"left": 363, "top": 0, "width": 121, "height": 157},
-            "bishop": {"left": 605, "top": 0, "width": 121, "height": 157},
-            "knight": {"left": 726, "top": 0, "width": 121, "height": 157},
-            "rook": {"left": 847, "top": 0, "width": 121, "height": 157},
-            "cannon": {"left": 1210, "top": 0, "width": 121, "height": 157},
-            "pawn": {"left": 1452, "top": 0, "width": 121, "height": 157}
+            "king": {
+                "left": 121,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "mandarin": {
+                "left": 363,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "bishop": {
+                "left": 605,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "knight": {
+                "left": 726,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "rook": {
+                "left": 847,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "cannon": {
+                "left": 1210,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "pawn": {
+                "left": 1452,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            }
         },
         "black": {
-            "king": { "left": 0, "top": 0, "width": 121, "height": 157 },
-            "mandarin" : {"left": 242, "top": 0, "width": 121, "height": 157},
-            "bishop": {"left": 484, "top": 0, "width": 121, "height": 157},
-            "knight": {"left": 726, "top": 0, "width": 121, "height": 157},
-            "rook": {"left": 847, "top": 0, "width": 121, "height": 157},
-            "cannon": {"left": 1210, "top": 0, "width": 121, "height": 157},
-            "pawn": {"left": 1573, "top": 0, "width": 121, "height": 157}
+            "king": {
+                "left": 0,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "mandarin": {
+                "left": 242,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "bishop": {
+                "left": 484,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "knight": {
+                "left": 726,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "rook": {
+                "left": 847,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "cannon": {
+                "left": 1210,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            },
+            "pawn": {
+                "left": 1573,
+                "top": 0,
+                "width": 121,
+                "height": 157
+            }
         }
     }
 }
-
-
-

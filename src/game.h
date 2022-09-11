@@ -1,9 +1,9 @@
 #ifndef CHESS_GAME_H_
 #define CHESS_GAME_H_
-#include <fstream>
 #include <map>
 #include "stonemap.h"
 #include "SFML/Graphics.hpp"
+
 
 
 class Game
@@ -13,24 +13,15 @@ private:
 
     std::map<std::string, sf::Texture> textures_; // 用于管理texture资源
 
-    // Sprite
-    sf::Sprite board_, board_background_;
-    sf::Sprite stone_background_sprites_[StoneMap::stone_cnt_];
-    sf::Sprite stone_text_sprites_[StoneMap::stone_cnt_];
-
-    // 保存一下相关尺寸设置，计算棋子的坐标的时候要用
-    int padding_left_;
-    int padding_right_;
-    int padding_top_;
-    int padding_bottom_;
-    int stone_radius_;
-
     sf::Texture &getTexture(const std::string &url);
 
     // map 游戏的主要逻辑
     StoneMap stone_map_;
+
+    // void initWindow(rapidjson::Document & document);
+    // void initStoneMap(rapidjson::Document &document);
 public:
-    void initFromFile(std::ifstream &in);
+    Game() ;
     void run();
 
     void processEvent();

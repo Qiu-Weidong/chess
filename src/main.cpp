@@ -1,19 +1,17 @@
 #include <fstream>
 #include <iostream>
 #include "game.h"
+#include "settings.h"
 
 int main(int argc, const char **argv)
 {
     std::ifstream in;
     if(argc > 1)
         in.open(argv[1]);
+    Settings &settings = Settings::getInstance();
+    if(in.is_open()) settings.loadFromFile(in);
     
-    if(! in.is_open()) {
-        std::cerr << "can\'t open settings.jsonc" << std::endl;
-    }
-
-    Game game;
-    game.initFromFile(in);
-    game.run();
+    std::cout << settings << std::endl;
+    Game().run();
     return 0;
 }

@@ -50,7 +50,7 @@ void StoneMap::init()
     };
     
     memset(stone_map_, 0, sizeof(stone_map_));
-    for (int id = 0; id <= stone_cnt_; id++)
+    for (int id = 0; id < stone_cnt_; id++)
     {
         stones_[id].up_or_down_ = id < (int)Stone::StoneID::DownPawnLeft ? Stone::UpOrDown::Up : Stone::UpOrDown::Down;
         stones_[id].alive_ = true;

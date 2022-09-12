@@ -1,9 +1,9 @@
 {
     "padding": {
-        "left": 30,
-        "right": 30,
-        "top": 30,
-        "bottom": 30
+        "left": 20,
+        "right": 20,
+        "top": 10,
+        "bottom": 10
     },
     "window-positon": {
         "left": 340,

@@ -17,9 +17,6 @@ private:
 
     // map 游戏的主要逻辑
     StoneMap stone_map_;
-
-    // void initWindow(rapidjson::Document & document);
-    // void initStoneMap(rapidjson::Document &document);
 public:
     Game() ;
     void run();

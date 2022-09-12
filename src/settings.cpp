@@ -27,7 +27,7 @@ void Settings::loadFromFile(std::ifstream &in)
             padding_.top_ = padding_.bottom_ = it3->value.GetInt();
         auto it4 = v_padding.FindMember("bottom");
         if (it4 != v_padding.MemberEnd() && it4->value.IsInt())
-            padding_.right_ = it4->value.GetInt();
+            padding_.bottom_ = it4->value.GetInt();
     }
 
     // 解析title

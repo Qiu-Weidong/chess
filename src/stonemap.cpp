@@ -1,4 +1,6 @@
 #include "stonemap.h"
+#include "settings.h"
+
 
 void StoneMap::init()
 {
@@ -63,8 +65,6 @@ void StoneMap::init()
 
         stone_map_[x][y] = &stones_[id];
     }
-
-    
 
 }
 

@@ -1,0 +1,65 @@
+{
+    "padding": {
+        "left": 0,
+        "right": 0,
+        "top": 0,
+        "bottom": 0
+    },
+    "window-positon": {
+        "left": 340,
+        "top": 5
+    },
+    "board": {
+        "img":"board.png",
+        "background": "bg/bg2.jpg"
+    },
+    "stone": {
+        "background": "stone-texture/aerial_wood_snips.png",
+        "text": "jinwen",
+        "radius": 48
+    },
+    "choosen-color": "red",
+    "icon-url":"圖標地址",
+    "img-dir": "./resource/img/",
+    "jinwen": {
+        "url": "stone-text/jinwen.png",
+        "scale": 0.650,
+        "char-width": 121,
+        "char-height": 125,
+        "red-king-index": 0,
+        "red-mandarin-index": 3,
+        "red-bishop-index": 4,
+        "red-knight-index": 6,
+        "red-rook-index": 7,
+        "red-cannon-index": 8,
+        "red-pawn-index": 9,
+        "black-king-index": 1,
+        "black-mandarin-index": 2,
+        "black-bishop-index": 5,
+        "black-knight-index": 6,
+        "black-rook-index": 7,
+        "black-cannon-index": 8,
+        "black-pawn-index": 10
+    },
+    "xiaozhuan": {
+        "url": "stone-text/xiaozhuan.png",
+        "scale": 0.60,
+        "char-width": 121,
+        "char-height": 122,
+        "red-king-index": 1,
+        "red-mandarin-index": 2,
+        "red-bishop-index": 4,
+        "red-knight-index": 6,
+        "red-rook-index": 9,
+        "red-cannon-index": 11,
+        "red-pawn-index": 12,
+
+        "black-king-index": 0,
+        "black-mandarin-index": 3,
+        "black-bishop-index": 5,
+        "black-knight-index": 7,
+        "black-rook-index": 8,
+        "black-cannon-index": 10,
+        "black-pawn-index": 13
+    }
+}

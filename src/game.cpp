@@ -78,15 +78,14 @@ Game::Game() {
         black_king(settings.stone_.black_king_index_*x, 0, x, y), black_mandarin(settings.stone_.black_mandarin_index_*x, 0, x, y),
         black_bishop(settings.stone_.black_bishop_index_*x, 0,x,y), black_knight(settings.stone_.black_knight_index_*x, 0, x, y),
         black_rook(settings.stone_.black_rook_index_*x, 0, x, y), black_cannon(settings.stone_.black_cannon_index_*x, 0, x, y),
-        black_pawn(settings.stone_.black_pawn_index_*x, 0, x, y) 
-        ;
+        black_pawn(settings.stone_.black_pawn_index_*x, 0, x, y) ;
 
     sf::IntRect rects[] = {
-        red_rook, red_knight, red_bishop, red_mandarin, red_king, red_mandarin, red_bishop, red_knight, red_rook,
-        red_pawn, red_cannon, red_pawn, red_pawn, red_pawn, red_cannon, red_pawn,
-
-        black_pawn, black_cannon, black_pawn, black_pawn, black_pawn, black_cannon, black_pawn,
         black_rook, black_knight, black_bishop, black_mandarin, black_king, black_mandarin, black_bishop, black_knight, black_rook,
+        black_pawn, black_cannon, black_pawn, black_pawn, black_pawn, black_cannon, black_pawn,
+        
+        red_pawn, red_cannon, red_pawn, red_pawn, red_pawn, red_cannon, red_pawn,
+        red_rook, red_knight, red_bishop, red_mandarin, red_king, red_mandarin, red_bishop, red_knight, red_rook,
     };
     sf::Vector2i locations[] = {
         sf::Vector2i(0, 0),
@@ -155,10 +154,13 @@ Game::Game() {
         stone_map_[i].stone_type_ = types[i];
 
         // 根据棋盘坐标计算实际坐标
-        sf::Vector2f pos(locations[i].x * 2 * settings.stone_.radius_ + settings.stone_.radius_, 
-            locations[i].y * 2 * settings.stone_.radius_ + settings.stone_.radius_);
+        sf::Vector2f pos(locations[i].x * 2 * settings.stone_.radius_ + settings.stone_.radius_ + settings.padding_.left_, 
+            locations[i].y * 2 * settings.stone_.radius_ + settings.stone_.radius_ + settings.padding_.top_);
         stone_map_[i].background_.setPosition(pos);
         stone_map_[i].text_.setPosition(pos);
+
+        stone_map_[i].text_.setColor( stone_map_[i].color_ == Stone::StoneColor::Black ? 
+            sf::Color(0, 45, 0): sf::Color(145, 0, 0));
     }
 
 

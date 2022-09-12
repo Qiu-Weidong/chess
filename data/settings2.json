@@ -1,9 +1,9 @@
 {
     "padding": {
-        "left": 0,
-        "right": 0,
-        "top": 0,
-        "bottom": 0
+        "left": 20,
+        "right": 20,
+        "top": 10,
+        "bottom": 10
     },
     "window-positon": {
         "left": 340,
@@ -14,7 +14,7 @@
         "background": "bg/bg2.jpg"
     },
     "stone": {
-        "background": "stone-texture/aerial_wood_snips.png",
+        "background": "stone-texture/rusty_metal_02.png",
         "text": "jinwen",
         "radius": 48
     },
@@ -43,8 +43,8 @@
     },
     "xiaozhuan": {
         "url": "stone-text/xiaozhuan.png",
-        "scale": 0.60,
-        "char-width": 121,
+        "scale": 0.65,
+        "char-width": 120,
         "char-height": 122,
         "red-king-index": 1,
         "red-mandarin-index": 2,

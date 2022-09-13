@@ -11,7 +11,6 @@ int main(int argc, const char **argv)
     Settings &settings = Settings::getInstance();
     if(in.is_open()) settings.loadFromFile(in);
     
-    std::cout << settings << std::endl;
     Game().run();
     return 0;
 }

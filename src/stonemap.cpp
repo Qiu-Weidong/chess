@@ -1,44 +1,23 @@
 #include "stonemap.h"
 #include "settings.h"
+#include "asset.h"
 
 
 void StoneMap::init()
-{
-    sf::Vector2i locations[] = {
-        sf::Vector2i(0, 0),
-        sf::Vector2i(1, 0),
-        sf::Vector2i(2, 0),
-        sf::Vector2i(3, 0),
-        sf::Vector2i(4, 0),
-        sf::Vector2i(5, 0),
-        sf::Vector2i(6, 0),
-        sf::Vector2i(7, 0),
-        sf::Vector2i(8, 0),
-        sf::Vector2i(8, 3),
-        sf::Vector2i(7, 2),
-        sf::Vector2i(6, 3),
-        sf::Vector2i(4, 3),
-        sf::Vector2i(2, 3),
-        sf::Vector2i(1, 2),
-        sf::Vector2i(0, 3),
+{  
+    memset(stones_, 0, sizeof(stones_));
+    Settings &settings = Settings::getInstance();
 
-        sf::Vector2i(0, 6),
-        sf::Vector2i(1, 7),
-        sf::Vector2i(2, 6),
-        sf::Vector2i(4, 6),
-        sf::Vector2i(6, 6),
-        sf::Vector2i(7, 7),
-        sf::Vector2i(8, 6),
-        sf::Vector2i(8, 9),
-        sf::Vector2i(7, 9),
-        sf::Vector2i(6, 9),
-        sf::Vector2i(5, 9),
-        sf::Vector2i(4, 9),
-        sf::Vector2i(3, 9),
-        sf::Vector2i(2, 9),
-        sf::Vector2i(1, 9),
-        sf::Vector2i(0, 9),
+    int locationx[] = {
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 4, 2, 1, 0,
+        0, 1, 2, 4, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1, 0,
     };
+
+    int locationy[] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 3, 3, 3, 2, 3,
+        6, 7, 6, 6, 6, 7, 6, 9, 9, 9, 9, 9, 9, 9, 9, 9,
+    };
+
     Stone::StoneType types[] = {
         Stone::StoneType::Rook, Stone::StoneType::Knight, Stone::StoneType::Bishop, Stone::StoneType::Mandarin,
         Stone::StoneType::King, Stone::StoneType::Mandarin, Stone::StoneType::Bishop, Stone::StoneType::Knight,
@@ -50,21 +29,26 @@ void StoneMap::init()
         Stone::StoneType::Knight, Stone::StoneType::Bishop, Stone::StoneType::Mandarin, Stone::StoneType::King, 
         Stone::StoneType::Mandarin, Stone::StoneType::Bishop, Stone::StoneType::Knight, Stone::StoneType::Rook,
     };
-    
-    memset(stone_map_, 0, sizeof(stone_map_));
-    for (int id = 0; id < stone_cnt_; id++)
-    {
-        stones_[id].up_or_down_ = id < (int)Stone::StoneID::DownPawnLeft ? Stone::UpOrDown::Up : Stone::UpOrDown::Down;
-        stones_[id].alive_ = true;
-        stones_[id].color_ = id < (int)Stone::StoneID::DownPawnLeft ? Stone::StoneColor::Black : Stone::StoneColor::Red;
-        stones_[id].location_ = locations[id];
-        stones_[id].stone_type_ = types[id];
 
-        int x = locations[id].x;
-        int y = locations[id].y;
-
-        stone_map_[x][y] = &stones_[id];
+    Stone::StoneColor user, computor;
+    if(settings.choose_red_) {
+        user = Stone::StoneColor::Red;
+        computor = Stone::StoneColor::Black;
+    }
+    else {
+        user = Stone::StoneColor::Black;
+        computor = Stone::StoneColor::Red;
     }
 
+    for(int i=0; i<stone_cnt_; i++) {
+        stones_[i].up_or_down_ = i < (int)Stone::StoneID::DownPawnLeft ? Stone::UpOrDown::Up : Stone::UpOrDown::Down;
+        stones_[i].alive_ = true;
+        
+        stones_[i].location_.x = locationx[i];
+        stones_[i].location_.y = locationy[i];
+        stones_[i].stone_type_ = types[i];
+
+        stones_[i].color_ = i < (int)Stone::StoneID::DownPawnLeft ? computor : user;
+    }
 }
 

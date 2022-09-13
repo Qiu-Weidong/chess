@@ -34,6 +34,8 @@ struct Settings {
     } stone_;
     std::string title_;
     std::string base_url_;
+    std::string icon_url_;
+    std::string box_url_;
     bool choose_red_;
 
     void loadFromFile(std::ifstream &in);

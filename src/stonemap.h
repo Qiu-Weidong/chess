@@ -5,7 +5,6 @@
 #include "rapidjson/document.h"
 
 
-
 class StoneMap {
     
 public:
@@ -17,8 +16,8 @@ private:
     Stone *stone_map_[cols][raws];
     Stone stones_[stone_cnt_];
 
-    sf::Sprite board_, board_background_;
-
+    Stone::StoneColor player_color_;
+    Stone::StoneColor turn_;
 public:
     void init(); // 初始化为开始局面
     Stone &operator[](int x) {
@@ -31,24 +30,12 @@ public:
         return stones_[x];
     }
 
-    friend sf::RenderTarget &operator<<(sf::RenderTarget &target, const StoneMap &stone_map) {
-        target.draw(stone_map.board_background_);
-        target.draw(stone_map.board_);
-        for(int i=0; i<stone_cnt_; i++) {
-            if(stone_map.stones_[i].alive_)
-            {target.draw(stone_map.stones_[i].background_);
-            target.draw(stone_map.stones_[i].text_);}
-        }
-        return target;
-    }
+    Stone::StoneColor getPlayerColor() const { return player_color_; }
+    Stone::StoneColor getTurn() const { return turn_; }
 
-    sf::Sprite &getBoardSprite() {
-        return board_;
-    }
-
-    sf::Sprite &getBoardBackgroundSprite() {
-        return board_background_;
-    }
+    void setPlayerColor(Stone::StoneColor color) { player_color_ = color; }
+    void setTurn(Stone::StoneColor color) { turn_ = color; }
+    void switchTurn() { turn_ = turn_ == Stone::StoneColor::Red ? Stone::StoneColor::Black : Stone::StoneColor::Red; }
 };
 
 #endif // CHESS_STONEMAP_H_

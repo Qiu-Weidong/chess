@@ -19,12 +19,13 @@
         "radius": 48
     },
     "choosen-color": "red",
-    "icon-url":"圖標地址",
+    "icon-url":"icon.png",
+    "box-url": "box.png",
     "img-dir": "./resource/img/",
     "jinwen": {
         "url": "stone-text/jinwen.png",
         "scale": 0.650,
-        "char-width": 121,
+        "char-width": 120,
         "char-height": 125,
         "red-king-index": 0,
         "red-mandarin-index": 3,

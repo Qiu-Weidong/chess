@@ -1,5 +1,6 @@
 #include "game.h"
 #include "settings.h"
+#include "asset.h"
 #include <iostream>
 
 void Game::run()
@@ -9,16 +10,6 @@ void Game::run()
         processEvent();
         render();
     }
-}
-
-sf::Texture &Game::getTexture(const std::string &url)
-{
-    const auto it = textures_.find(url);
-    if (it != textures_.end())
-        return it->second;
-    sf::Texture &texture = textures_[url];
-    assert(texture.loadFromFile(url));
-    return texture;
 }
 
 void Game::processEvent()
@@ -35,38 +26,47 @@ void Game::processEvent()
 void Game::render()
 {
     window_.clear();
-    window_ << stone_map_;
+
+    window_.draw(board_background_);
+    window_.draw(board_);
+
+    for(const auto &sprite : stone_background_) window_.draw(sprite);
+    for(const auto &sprite : stone_text_) window_.draw(sprite);
+
     window_.display();
 }
 
 Game::Game() {
     Settings &settings = Settings::getInstance();
+    Asset &asset = Asset::getInstanct();
 
     // 窗口设置
     const int window_width = settings.stone_.radius_ * 2 * 9 + settings.padding_.left_ + settings.padding_.right_;
     const int window_height = settings.stone_.radius_ * 2 * 10 + settings.padding_.top_ + settings.padding_.bottom_;
     window_.create(sf::VideoMode(window_width, window_height), sf::String::fromUtf8(settings.title_.begin(), settings.title_.end()));
     window_.setPosition(sf::Vector2i(settings.window_position_.left_, settings.window_position_.top_));
+    sf::Image icon;
+    icon.loadFromFile(settings.icon_url_);
+    window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
     // 棋盘设置
-    sf::Sprite &board = stone_map_.getBoardSprite();
-    board.setTexture(getTexture(settings.board_.img_url_));
-    sf::Sprite &board_bg = stone_map_.getBoardBackgroundSprite();
-    sf::Texture &board_bg_texture = getTexture(settings.board_.background_url_);
+    board_.setTexture(asset.getTexture(settings.board_.img_url_));
+    sf::Texture &board_bg_texture = asset.getTexture(settings.board_.background_url_);
     float scalex = window_width / (float)board_bg_texture.getSize().x;
     float scaley = window_height / (float)board_bg_texture.getSize().y;
     float scale = scalex > scaley ? scalex : scaley;
     if(scale > 1.0)
-        board_bg.setScale(scale, scale);
-    board_bg.setTexture(board_bg_texture);
+        board_background_.setScale(scale, scale);
+    board_background_.setTexture(board_bg_texture);
 
-    board.setPosition(settings.padding_.left_ + settings.stone_.radius_, settings.padding_.top_ + settings.stone_.radius_);
-    scale = settings.stone_.radius_ / (board.getTexture()->getSize().x / 16.0);
-    board.setScale(scale, scale);
+    board_.setPosition(settings.padding_.left_ + settings.stone_.radius_, settings.padding_.top_ + settings.stone_.radius_);
+    scale = settings.stone_.radius_ / (board_.getTexture()->getSize().x / 16.0);
+    board_.setScale(scale, scale);
 
     // 棋子设置
-    sf::Texture &stone_bg = getTexture(settings.stone_.background_url_);
-    sf::Texture &stone_text = getTexture(settings.stone_.text_url_);
+    stone_map_.init();
+    sf::Texture &stone_bg = asset.getTexture(settings.stone_.background_url_);
+    sf::Texture &stone_text = asset.getTexture(settings.stone_.text_url_);
 
     int x = settings.stone_.char_width_;
     int y = settings.stone_.char_height_;
@@ -87,82 +87,27 @@ Game::Game() {
         red_pawn, red_cannon, red_pawn, red_pawn, red_pawn, red_cannon, red_pawn,
         red_rook, red_knight, red_bishop, red_mandarin, red_king, red_mandarin, red_bishop, red_knight, red_rook,
     };
-    sf::Vector2i locations[] = {
-        sf::Vector2i(0, 0),
-        sf::Vector2i(1, 0),
-        sf::Vector2i(2, 0),
-        sf::Vector2i(3, 0),
-        sf::Vector2i(4, 0),
-        sf::Vector2i(5, 0),
-        sf::Vector2i(6, 0),
-        sf::Vector2i(7, 0),
-        sf::Vector2i(8, 0),
-        sf::Vector2i(8, 3),
-        sf::Vector2i(7, 2),
-        sf::Vector2i(6, 3),
-        sf::Vector2i(4, 3),
-        sf::Vector2i(2, 3),
-        sf::Vector2i(1, 2),
-        sf::Vector2i(0, 3),
-
-        sf::Vector2i(0, 6),
-        sf::Vector2i(1, 7),
-        sf::Vector2i(2, 6),
-        sf::Vector2i(4, 6),
-        sf::Vector2i(6, 6),
-        sf::Vector2i(7, 7),
-        sf::Vector2i(8, 6),
-        sf::Vector2i(8, 9),
-        sf::Vector2i(7, 9),
-        sf::Vector2i(6, 9),
-        sf::Vector2i(5, 9),
-        sf::Vector2i(4, 9),
-        sf::Vector2i(3, 9),
-        sf::Vector2i(2, 9),
-        sf::Vector2i(1, 9),
-        sf::Vector2i(0, 9),
-    };
-    Stone::StoneType types[] = {
-        Stone::StoneType::Rook, Stone::StoneType::Knight, Stone::StoneType::Bishop, Stone::StoneType::Mandarin,
-        Stone::StoneType::King, Stone::StoneType::Mandarin, Stone::StoneType::Bishop, Stone::StoneType::Knight,
-        Stone::StoneType::Rook, Stone::StoneType::Pawn, Stone::StoneType::Cannon, Stone::StoneType::Pawn,
-        Stone::StoneType::Pawn, Stone::StoneType::Pawn, Stone::StoneType::Cannon, Stone::StoneType::Pawn,
-
-        Stone::StoneType::Pawn, Stone::StoneType::Cannon, Stone::StoneType::Pawn, Stone::StoneType::Pawn, 
-        Stone::StoneType::Pawn, Stone::StoneType::Cannon, Stone::StoneType::Pawn, Stone::StoneType::Rook, 
-        Stone::StoneType::Knight, Stone::StoneType::Bishop, Stone::StoneType::Mandarin, Stone::StoneType::King, 
-        Stone::StoneType::Mandarin, Stone::StoneType::Bishop, Stone::StoneType::Knight, Stone::StoneType::Rook,
-    };
 
     scale = settings.stone_.radius_ / (156.0 / 2.0 ) ;
     for(int i=0; i<StoneMap::stone_cnt_; i++) {
         const int d = 156, cnt = 50;
-        stone_map_[i].background_.setTexture(stone_bg);
-        stone_map_[i].background_.setTextureRect(sf::IntRect(rand()%cnt*d, 0, d, d));
-        stone_map_[i].background_.setScale(scale, scale);
-        stone_map_[i].background_.setOrigin(d / 2.0, d / 2.0);
+        stone_background_[i].setTexture(stone_bg);
+        stone_background_[i].setTextureRect(sf::IntRect(rand()%cnt*d, 0, d, d));
+        stone_background_[i].setScale(scale, scale);
+        stone_background_[i].setOrigin(d / 2.0, d / 2.0);
         
-        stone_map_[i].text_.setTexture(stone_text);
-        stone_map_[i].text_.setTextureRect(rects[i]);
-        stone_map_[i].text_.setOrigin(settings.stone_.char_width_ / 2.0, settings.stone_.char_height_ / 2.0);
-        stone_map_[i].text_.setScale(settings.stone_.scale_, settings.stone_.scale_);
-
-        stone_map_[i].up_or_down_ = i < (int)Stone::StoneID::DownPawnLeft ? Stone::UpOrDown::Up : Stone::UpOrDown::Down;
-        stone_map_[i].alive_ = true;
-        stone_map_[i].color_ = i < (int)Stone::StoneID::DownPawnLeft ? Stone::StoneColor::Black : Stone::StoneColor::Red;
-        stone_map_[i].location_ = locations[i];
-        stone_map_[i].stone_type_ = types[i];
+        stone_text_[i].setTexture(stone_text);
+        stone_text_[i].setTextureRect( settings.choose_red_ ? rects[i] : rects[31 - i]);
+        stone_text_[i].setOrigin(settings.stone_.char_width_ / 2.0, settings.stone_.char_height_ / 2.0);
+        stone_text_[i].setScale(settings.stone_.scale_, settings.stone_.scale_);
 
         // 根据棋盘坐标计算实际坐标
-        sf::Vector2f pos(locations[i].x * 2 * settings.stone_.radius_ + settings.stone_.radius_ + settings.padding_.left_, 
-            locations[i].y * 2 * settings.stone_.radius_ + settings.stone_.radius_ + settings.padding_.top_);
-        stone_map_[i].background_.setPosition(pos);
-        stone_map_[i].text_.setPosition(pos);
+        sf::Vector2f pos(stone_map_[i].location_.x * 2 * settings.stone_.radius_ + settings.stone_.radius_ + settings.padding_.left_, 
+            stone_map_[i].location_.y * 2 * settings.stone_.radius_ + settings.stone_.radius_ + settings.padding_.top_);
+        stone_background_[i].setPosition(pos);
+        stone_text_[i].setPosition(pos);
 
-        stone_map_[i].text_.setColor( stone_map_[i].color_ == Stone::StoneColor::Black ? 
-            sf::Color(0, 45, 0): sf::Color(145, 0, 0));
+        stone_text_[i].setColor( stone_map_[i].color_ == Stone::StoneColor::Black ? 
+            sf::Color(0, 45, 0, 233): sf::Color(145, 0, 0, 233));
     }
-
-
-    
 }

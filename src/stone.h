@@ -1,7 +1,6 @@
 #ifndef CHESS_STONE_H_
 #define CHESS_STONE_H_
 
-#include "SFML/Graphics.hpp"
 
 struct Stone {
 
@@ -87,9 +86,7 @@ struct Stone {
     bool alive_;
     StoneColor color_;
     UpOrDown up_or_down_;
-    sf::Vector2i location_; // 棋盘坐标
-
-    sf::Sprite background_, text_;
+    struct { int x, y; } location_;
 };
 
 #endif // CHESS_STONE_H_

@@ -161,6 +161,21 @@ void Settings::loadFromFile(std::ifstream &in)
             stone_.black_pawn_index_ =
                 black_pawn_index->value.GetInt();
     }
+    it = document.FindMember("choosen-color");
+    if(it != document.MemberEnd() && it->value.IsString() ) {
+        std::string msg = it->value.GetString();
+        if(msg == "black") choose_red_ = false;
+    }
+
+    it = document.FindMember("icon-url");
+    if(it != document.MemberEnd() && it->value.IsString()) {
+        icon_url_ = base_url_ + it->value.GetString();
+    }
+
+    it = document.FindMember("box-url");
+    if(it != document.MemberEnd() && it->value.IsString()) {
+        box_url_ = base_url_ + it->value.GetString();
+    }
 }
 
 Settings::Settings()
@@ -199,4 +214,6 @@ Settings::Settings()
 
     title_ = "中國象棋對戰";
     choose_red_ = true;
+    icon_url_ = "icon.png";
+    box_url_ = "box.png";
 }

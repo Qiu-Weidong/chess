@@ -15,12 +15,14 @@ struct Settings {
     } window_position_;
     struct {
         std::string img_url_, background_url_;
+        int river_index_;
+        std::string river_url_;
     } board_;
     struct {
         std::string background_url_;
         std::string text_url_;
         float scale_;
-        int char_width_, char_height_;
+        int char_width_;
         int radius_;
         int red_mandarin_index_, red_king_index_, 
             red_bishop_index_, red_knight_index_,
@@ -31,6 +33,7 @@ struct Settings {
             black_bishop_index_, black_knight_index_,
             black_rook_index_, black_cannon_index_,
             black_pawn_index_; 
+        int raw, col;
     } stone_;
     std::string title_;
     std::string base_url_;

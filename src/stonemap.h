@@ -20,7 +20,20 @@ private:
     Stone::StoneColor player_color_;
     Stone::StoneColor turn_;
 
-    
+    void moveStone(Stone *mover, int x, int y);
+    void killStone(Stone *killer, int x, int y);
+
+    bool isKingMeeted();
+
+    bool canMove(Stone *mover, int x, int y);
+    bool canKingMove(Stone *king, int x, int y);
+    bool canMandarinMove(Stone *mandarin, int x, int y);
+    bool canBishopMove(Stone *bishop, int x, int y);
+    bool canKnightMove(Stone *knight, int x, int y);
+    bool canRookMove(Stone *rook, int x, int y);
+    bool canCannonMove(Stone *cannon, int x, int y);
+    bool canPawnMove(Stone *pawn, int x, int y);
+
 public:
     void init(); // 初始化为开始局面
     Stone &operator[](int x) {
@@ -42,7 +55,7 @@ public:
 
     void setPlayerColor(Stone::StoneColor color) { player_color_ = color; }
     void setTurn(Stone::StoneColor color) { turn_ = color; }
-    void switchTurn() { turn_ = turn_ == Stone::StoneColor::Red ? Stone::StoneColor::Black : Stone::StoneColor::Red; }
+    void switchTurn() { turn_ = turn_ == Stone::StoneColor::Red ? Stone::StoneColor::Black : Stone::StoneColor::Red; /*selected_stone_ = nullptr;*/ }
 
     void onBoardClicked(int x, int y) ; // x、y为棋盘坐标
     

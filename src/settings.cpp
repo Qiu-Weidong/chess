@@ -64,6 +64,12 @@ void Settings::loadFromFile(std::ifstream &in)
         auto it2 = v_board.FindMember("background");
         if (it2 != v_board.MemberEnd() && it2->value.IsString())
             board_.background_url_ = base_url_ + it2->value.GetString();
+        auto it3 = v_board.FindMember("river-index");
+        if(it3 != document.MemberEnd() && it3->value.IsInt()) 
+            board_.river_index_ = it3->value.GetInt() % 4;
+        auto it4 = v_board.FindMember("river-url");
+        if(it4 != document.MemberEnd() && it4->value.IsString())
+            board_.river_url_ = base_url_ + it4->value.GetString();
     }
 
     std::string text_name = "null";
@@ -97,9 +103,15 @@ void Settings::loadFromFile(std::ifstream &in)
         auto it3 = v_stone_text.FindMember("char-width");
         if (it3 != v_stone_text.MemberEnd() && it3->value.IsInt())
             stone_.char_width_ = it3->value.GetInt();
-        auto it4 = v_stone_text.FindMember("char-height");
-        if (it4 != v_stone_text.MemberEnd() && it4->value.IsInt())
-            stone_.char_height_ = it4->value.GetInt();
+        // auto it4 = v_stone_text.FindMember("char-height");
+        // if (it4 != v_stone_text.MemberEnd() && it4->value.IsInt())
+        //     stone_.char_height_ = it4->value.GetInt();
+        auto it5 = v_stone_text.FindMember("raw");
+        if(it5 != v_stone_text.MemberEnd() && it5->value.IsInt())
+            stone_.raw = it5->value.GetInt();
+        auto it6 = v_stone_text.FindMember("col");
+        if(it6 != v_stone_text.MemberEnd() && it6->value.IsInt())
+            stone_.col = it6->value.GetInt();
 
         auto red_king_index = v_stone_text.FindMember("red-king-index");
         auto red_mandarin_index = v_stone_text.FindMember("red-mandarin-index");
@@ -199,10 +211,14 @@ Settings::Settings()
     base_url_ = "./resource/img/";
     board_.img_url_ = base_url_ + "board.png";
     board_.background_url_ = base_url_ + "bg/bg.jpg";
+    board_.river_index_ = 0;
+    board_.river_url_ = base_url_ + "river.png";
     stone_.background_url_ = base_url_ + "stone-texture/aerial_wood_snips.png";
-    stone_.radius_ = 46;
-    stone_.char_width_ = 121;
-    stone_.char_height_ = 122;
+    stone_.radius_ = 48;
+    stone_.char_width_ = 120;
+    // stone_.char_height_ = 122;
+    stone_.raw = 1;
+    stone_.col = 50;
     stone_.text_url_ = base_url_ + "stone-text/xiaozhuan.png";
     stone_.scale_ = 0.6;
 
@@ -224,8 +240,8 @@ Settings::Settings()
 
     title_ = "中國象棋對戰";
     choose_red_ = true;
-    icon_url_ = "icon.png";
-    box_url_ = "box.png";
+    icon_url_ = base_url_ + "icon.png";
+    box_url_ = base_url_ + "box.png";
     panel_width_ = 168;
     turn_label_radius_ = 80;
 }

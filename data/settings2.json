@@ -11,10 +11,14 @@
     },
     "board": {
         "img":"board.png",
-        "background": "bg/bg8.jpg"
+        "background": "bg/bg8.jpg",
+        "river-index": 3,
+        "river-url": "river.png"
     },
     "stone": {
         "background": "stone-texture/rusty_metal_02.png",
+        "raw": 1,
+        "col": 50,
         "text": "jinwen",
         "radius": 48
     },
@@ -26,7 +30,6 @@
         "url": "stone-text/jinwen.png",
         "scale": 0.650,
         "char-width": 120,
-        "char-height": 125,
         "red-king-index": 0,
         "red-mandarin-index": 3,
         "red-bishop-index": 4,

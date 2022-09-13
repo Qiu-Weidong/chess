@@ -14,10 +14,13 @@ public:
 
 private:
     Stone *stone_map_[cols][raws];
+    Stone *selected_stone_;
     Stone stones_[stone_cnt_];
 
     Stone::StoneColor player_color_;
     Stone::StoneColor turn_;
+
+    
 public:
     void init(); // 初始化为开始局面
     Stone &operator[](int x) {
@@ -33,9 +36,17 @@ public:
     Stone::StoneColor getPlayerColor() const { return player_color_; }
     Stone::StoneColor getTurn() const { return turn_; }
 
+    Stone *getSelectedStone() const {
+        return selected_stone_;
+    }
+
     void setPlayerColor(Stone::StoneColor color) { player_color_ = color; }
     void setTurn(Stone::StoneColor color) { turn_ = color; }
     void switchTurn() { turn_ = turn_ == Stone::StoneColor::Red ? Stone::StoneColor::Black : Stone::StoneColor::Red; }
+
+    void onBoardClicked(int x, int y) ; // x、y为棋盘坐标
+    
+    struct { int x, y; } from_, to_;
 };
 
 #endif // CHESS_STONEMAP_H_

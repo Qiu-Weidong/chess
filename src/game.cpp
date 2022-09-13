@@ -177,7 +177,40 @@ void Game::mouseEventHandler(const sf::Event &event)
 
     if((x - cx) * (x - cx) + (y - cy) * (y - cy) < r * r)
     {
-        std::cout << board_x << ", " << board_y << std::endl;
+        stone_map_.onBoardClicked(board_x, board_y);
+
+        // 更新box
+        if(stone_map_.getSelectedStone() != nullptr) {
+            // 选中某个棋子
+            Stone *selected = stone_map_.getSelectedStone();
+            sf::Vector2f pos(selected->location_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
+                    selected->location_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_);
+            box_select_.setPosition(pos);
+        }
+        else {
+            box_select_.setPosition(-settings.stone_.radius_, -settings.stone_.radius_);
+        }
+
+        sf::Vector2f from_pos(stone_map_.from_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
+                    stone_map_.from_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_ );
+        box_from_.setPosition(from_pos);
+        sf::Vector2f to_pos(stone_map_.to_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
+                    stone_map_.to_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_ );
+        box_to_.setPosition(to_pos);
+
+        // 更新棋子坐标
+        for(int i=0; i<StoneMap::stone_cnt_; i++) {
+            if(! stone_map_[i].alive_) {
+                stone_background_[i].setPosition(-settings.stone_.radius_, -settings.stone_.radius_);
+                stone_text_[i].setPosition(-settings.stone_.radius_, -settings.stone_.radius_);
+            }
+            else {
+                sf::Vector2f pos(stone_map_[i].location_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
+                    stone_map_[i].location_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_);
+                stone_background_[i].setPosition(pos);
+                stone_text_[i].setPosition(pos);
+            }
+        }
     }
         
 }

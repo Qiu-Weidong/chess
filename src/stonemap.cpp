@@ -53,5 +53,29 @@ void StoneMap::init()
 
         stone_map_[x][y] = &stones_[i];
     }
+
+    turn_ = Stone::StoneColor::Red;
+    selected_stone_ = nullptr;
+}
+
+void StoneMap::onBoardClicked(int x, int y) {
+    if(selected_stone_ != nullptr) {
+        int from_x = selected_stone_->location_.x;
+        int from_y = selected_stone_->location_.y;
+        stone_map_[from_x][from_y] = nullptr;
+        stone_map_[x][y] = selected_stone_;
+        selected_stone_->location_.x = x;
+        selected_stone_->location_.y = y;
+        selected_stone_ = nullptr;
+
+        from_.x = from_x;
+        from_.y = from_y;
+        to_.x = x;
+        to_.y = y;
+    }
+    else {
+        selected_stone_ = stone_map_[x][y];
+        from_.x = from_.y = to_.x = to_.y = -1;
+    }
 }
 

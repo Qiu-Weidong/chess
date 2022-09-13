@@ -44,11 +44,14 @@ void StoneMap::init()
         stones_[i].up_or_down_ = i < (int)Stone::StoneID::DownPawnLeft ? Stone::UpOrDown::Up : Stone::UpOrDown::Down;
         stones_[i].alive_ = true;
         
-        stones_[i].location_.x = locationx[i];
-        stones_[i].location_.y = locationy[i];
+        int x = locationx[i], y = locationy[i];
+        stones_[i].location_.x = x;
+        stones_[i].location_.y = y;
         stones_[i].stone_type_ = types[i];
 
         stones_[i].color_ = i < (int)Stone::StoneID::DownPawnLeft ? computor : user;
+
+        stone_map_[x][y] = &stones_[i];
     }
 }
 

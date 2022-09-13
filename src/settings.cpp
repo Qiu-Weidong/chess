@@ -176,6 +176,16 @@ void Settings::loadFromFile(std::ifstream &in)
     if(it != document.MemberEnd() && it->value.IsString()) {
         box_url_ = base_url_ + it->value.GetString();
     }
+
+    it = document.FindMember("panel-width");
+    if(it != document.MemberEnd() && it->value.IsInt()) {
+        panel_width_ = it->value.GetInt();
+    }
+
+    it = document.FindMember("turn-label-radius");
+    if(it != document.MemberEnd() && it->value.IsInt()) {
+        turn_label_radius_ = it->value.GetInt();
+    }
 }
 
 Settings::Settings()
@@ -216,4 +226,7 @@ Settings::Settings()
     choose_red_ = true;
     icon_url_ = "icon.png";
     box_url_ = "box.png";
+    panel_width_ = 168;
+    turn_label_radius_ = 80;
 }
+

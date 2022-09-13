@@ -11,7 +11,7 @@
     },
     "board": {
         "img":"board.png",
-        "background": "bg/bg2.jpg"
+        "background": "bg/bg8.jpg"
     },
     "stone": {
         "background": "stone-texture/rusty_metal_02.png",
@@ -62,5 +62,7 @@
         "black-rook-index": 8,
         "black-cannon-index": 10,
         "black-pawn-index": 13
-    }
+    },
+    "panel-width" : 168,
+    "turn-label-radius": 80
 }

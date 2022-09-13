@@ -37,6 +37,8 @@ struct Settings {
     std::string icon_url_;
     std::string box_url_;
     bool choose_red_;
+    int panel_width_;
+    int turn_label_radius_;
 
     void loadFromFile(std::ifstream &in);
     static Settings &getInstance() {

@@ -18,8 +18,16 @@ void Game::processEvent()
 
     while (window_.pollEvent(event))
     {
-        if (event.type == sf::Event::Closed)
-            window_.close();
+        switch(event.type) {
+            case sf::Event::Closed:
+                window_.close();
+                break;
+            case sf::Event::MouseButtonPressed:
+                mouseEventHandler(event);
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -33,6 +41,11 @@ void Game::render()
     for(const auto &sprite : stone_background_) window_.draw(sprite);
     for(const auto &sprite : stone_text_) window_.draw(sprite);
 
+    window_.draw(box_from_);
+    window_.draw(box_to_);
+    window_.draw(box_select_);
+    window_.draw(turn_label_);
+
     window_.display();
 }
 
@@ -41,7 +54,7 @@ Game::Game() {
     Asset &asset = Asset::getInstanct();
 
     // 窗口设置
-    const int window_width = settings.stone_.radius_ * 2 * 9 + settings.padding_.left_ + settings.padding_.right_;
+    const int window_width = settings.stone_.radius_ * 2 * 9 + settings.padding_.left_ + settings.padding_.right_ + settings.panel_width_;
     const int window_height = settings.stone_.radius_ * 2 * 10 + settings.padding_.top_ + settings.padding_.bottom_;
     window_.create(sf::VideoMode(window_width, window_height), sf::String::fromUtf8(settings.title_.begin(), settings.title_.end()));
     window_.setPosition(sf::Vector2i(settings.window_position_.left_, settings.window_position_.top_));
@@ -110,4 +123,61 @@ Game::Game() {
         stone_text_[i].setColor( stone_map_[i].color_ == Stone::StoneColor::Black ? 
             sf::Color(0, 45, 0, 233): sf::Color(145, 0, 0, 233));
     }
+
+    sf::Texture &box = asset.getTexture(settings.box_url_);
+    scale =  (float) (settings.stone_.radius_ << 1) / box.getSize().x;
+    box_select_.setTexture(box);
+    box_from_.setTexture(box);
+    box_to_.setTexture(box);
+    box_select_.setScale(scale, scale);
+    box_from_.setScale(scale, scale);
+    box_to_.setScale(scale, scale);
+    box_select_.setOrigin(box.getSize().x >> 1, box.getSize().y >> 1);
+    box_from_.setOrigin(box.getSize().x >> 1, box.getSize().y >> 1);
+    box_to_.setOrigin(box.getSize().x >> 1, box.getSize().y >> 1);
+
+    box_select_.setPosition(100, 200);
+    box_from_.setPosition(400, 500);
+    box_to_.setPosition(300, 600);
+
+    box_from_.setColor(sf::Color(255, 0, 0, 213));
+    box_select_.setColor(sf::Color(233, 128, 24, 213));
+    box_to_.setColor(sf::Color(15, 234, 255, 213));
+
+    turn_label_.setTexture(stone_bg);
+    turn_label_.setTextureRect(sf::IntRect(sf::IntRect(rand()%50*156, 0, 156, 156)));
+    turn_label_.setOrigin(156 >> 1, 156 >> 1);
+    int turn_label_left = (settings.panel_width_ >> 1);
+    turn_label_.setPosition(window_width - settings.panel_width_ + turn_label_left, 
+        settings.turn_label_radius_ + 50);
+}
+
+void Game::mouseEventHandler(const sf::Event &event)
+{
+    if(event.mouseButton.button != sf::Mouse::Button::Left) return; // 暂时先不处理鼠标右键
+    int x = event.mouseButton.x;
+    int y = event.mouseButton.y;
+    // 计算点击的棋盘坐标
+    Settings &settings = Settings::getInstance();
+    const int r = settings.stone_.radius_;
+    
+    // 点击到棋盘外面
+    if(x < settings.padding_.left_ || x > settings.padding_.left_ + r * 18 + settings.padding_.left_
+        || y < settings.padding_.top_ || y > settings.padding_.top_ + r * 20)
+    {
+        return ;
+    }
+
+    
+    int board_x = (x - settings.padding_.left_) / (r << 1);
+    int board_y = (y - settings.padding_.top_) / (r << 1);
+
+    int cx = board_x * (r << 1) + settings.padding_.left_ + r;
+    int cy = board_y * (r << 1) + settings.padding_.top_ + r;
+
+    if((x - cx) * (x - cx) + (y - cy) * (y - cy) < r * r)
+    {
+        std::cout << board_x << ", " << board_y << std::endl;
+    }
+        
 }

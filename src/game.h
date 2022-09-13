@@ -15,9 +15,11 @@ private:
     // map 游戏的主要逻辑
     StoneMap stone_map_;
 
-    sf::Sprite board_, board_background_;
+    sf::Sprite board_, board_background_, box_select_, box_from_, box_to_;
     std::array<sf::Sprite, StoneMap::stone_cnt_> stone_background_, stone_text_;
+    sf::Sprite turn_label_;
 
+    void mouseEventHandler(const sf::Event &event);
 public:
     Game() ;
     void run();

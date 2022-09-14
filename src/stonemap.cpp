@@ -5,7 +5,7 @@
 
 void StoneMap::init()
 {  
-    memset(stones_, 0, sizeof(stones_));
+    memset(stone_map_, 0, sizeof(stone_map_));
     Settings &settings = Settings::getInstance();
 
     while(! steps_.empty()) steps_.pop();
@@ -357,4 +357,6 @@ void StoneMap::regret() {
 
     selected_stone_ = nullptr;
     from_.x = from_.y = to_.x = to_.y = -2;
+
+    switchTurn();
 }

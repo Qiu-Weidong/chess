@@ -57,6 +57,9 @@ void Game::render()
     window_.draw(new_game_button_);
     window_.draw(undo_button_);
 
+    window_.draw(looog_);
+    window_.draw(win_);
+
     window_.display();
 }
 
@@ -223,6 +226,24 @@ Game::Game() {
         // new_game_button_.setOutlineColor(sf::Color::Blue);
         // new_game_button_.setOutlineThickness(1);
     }
+
+    {
+        sf::Texture &texture = asset.getTexture(settings.base_url_ + "img/long.png");
+        looog_.setTexture(texture);
+        // std::cout << texture.getSize().x / 2.0 << ", " << texture.getSize().y / 2.0; 269 316.5
+        // looog_.setOrigin(texture.getSize().x / 2.0 - 100, texture.getSize().y / 2.0 - 100);
+        looog_.setOrigin(258.0, 285.0);
+        looog_.setPosition((window_width - settings.panel_width_) / 2.0, window_height / 2.0);
+        looog_.setColor(sf::Color(127, 27, 27, 175));
+
+        sf::Texture &texture2 = asset.getTexture(settings.base_url_ + "img/win/win2.png");
+        win_.setTexture(texture2);
+        win_.setOrigin(texture2.getSize().x / 2.0, texture2.getSize().y / 2.0);
+        win_.setPosition((window_width - settings.panel_width_) / 2.0, window_height / 2.0);
+        win_.setColor(sf::Color(155, 27, 27, 225));
+    }
+    
+
 }
 
 void Game::mouseClickedHandler(const sf::Event &event)
@@ -240,12 +261,10 @@ void Game::mouseClickedHandler(const sf::Event &event)
     {
         // 查看是否点击了按钮
         if(new_game_button_.getGlobalBounds().contains(x, y)) {
-            // openNewGame();
             stone_map_.init();
             updateStones();
         }
         else if(undo_button_.getGlobalBounds().contains(x, y)) {
-            // std::cout << "undo" << std::endl;
             stone_map_.regret();
             updateStones();
         }

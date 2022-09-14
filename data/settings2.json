@@ -11,7 +11,7 @@
     },
     "board": {
         "img":"img/board.png",
-        "background": "img/bg/bg8.jpg",
+        "background": "img/bg/bg.jpg",
         "river-index": 3,
         "river-url": "img/river.png",
         "box-url": "img/box.png"

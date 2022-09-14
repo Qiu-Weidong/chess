@@ -2,8 +2,9 @@
 #define CHESS_STONEMAP_H_
 #include <array>
 #include <stack>
+#include <array>
 #include "stone.h"
-#include "rapidjson/document.h"
+#include "step.h"
 
 
 class StoneMap {
@@ -12,35 +13,15 @@ public:
     static const int stone_cnt_ = 32;
     static const int raws_ = 10;
     static const int cols_ = 9;
-
+    
+    using StoneArray = std::array<Stone, stone_cnt_>;
 private:
-    struct Step {
-        struct { int x, y; } from_;
-        struct { int x, y; } to_;
-        Stone *mover_;
-        Stone *killee_;
-        Step(Stone *mover, int from_x, int from_y, int to_x, int to_y, Stone *killee=nullptr) {
-            mover_ = mover; killee_ = killee;
-            from_.x = from_x; from_.y = from_y;
-            to_.x = to_x; to_.y = to_y;
-        }
-
-        Step(Stone *mover, int dest_x, int dest_y, Stone *killee=nullptr) {
-            assert(mover);
-            mover_ = mover;
-            from_.x = mover->location_.x;
-            from_.y = mover->location_.y;
-            to_.x = dest_x;
-            to_.y = dest_y;
-            killee_ = killee;
-        }
-    };
-
-    std::stack<Step> steps_;
+    
     Stone *stone_map_[cols_][raws_];
+    StoneArray stones_;
+    
+    std::stack<Step> steps_;
     Stone *selected_stone_;
-    Stone stones_[stone_cnt_];
-
     Stone::StoneColor player_color_;
     Stone::StoneColor turn_;
 
@@ -74,6 +55,10 @@ public:
     Stone::StoneColor getPlayerColor() const { return player_color_; }
     Stone::StoneColor getTurn() const { return turn_; }
 
+    const StoneArray &getAllStones() const {
+        return stones_;
+    }
+
     Stone *getSelectedStone() const {
         return selected_stone_;
     }
@@ -85,6 +70,8 @@ public:
     void onBoardClicked(int x, int y) ; // x、y为棋盘坐标
     
     struct { int x, y; } from_, to_;
+
+    friend class ComputerPlayer;
 };
 
 #endif // CHESS_STONEMAP_H_

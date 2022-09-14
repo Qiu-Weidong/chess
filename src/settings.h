@@ -38,6 +38,7 @@ struct Settings {
     std::string title_;
     std::string base_url_;
     std::string icon_url_;
+    std::string win_url_, lose_url_;
 
     struct {
         std::string font_url_, button_new_text_, button_undo_text_;

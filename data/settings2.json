@@ -26,6 +26,7 @@
     "choosen-color": "black",
     "icon-url":"img/icon.png",
     "res-dir": "./resource/",
+    "win-url": "img/win/win6.png",
     "jinwen": {
         "url": "img/stone-text/jinwen.png",
         "scale": 0.650,

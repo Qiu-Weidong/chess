@@ -10,6 +10,7 @@
 class Game
 {
 private:
+
     sf::RenderWindow window_;
     
     // map 游戏的主要逻辑

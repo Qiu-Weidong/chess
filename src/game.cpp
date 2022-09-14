@@ -230,13 +230,11 @@ Game::Game() {
     {
         sf::Texture &texture = asset.getTexture(settings.base_url_ + "img/long.png");
         looog_.setTexture(texture);
-        // std::cout << texture.getSize().x / 2.0 << ", " << texture.getSize().y / 2.0; 269 316.5
-        // looog_.setOrigin(texture.getSize().x / 2.0 - 100, texture.getSize().y / 2.0 - 100);
         looog_.setOrigin(258.0, 285.0);
         looog_.setPosition((window_width - settings.panel_width_) / 2.0, window_height / 2.0);
         looog_.setColor(sf::Color(127, 27, 27, 175));
 
-        sf::Texture &texture2 = asset.getTexture(settings.base_url_ + "img/win/win2.png");
+        sf::Texture &texture2 = asset.getTexture(settings.win_url_);
         win_.setTexture(texture2);
         win_.setOrigin(texture2.getSize().x / 2.0, texture2.getSize().y / 2.0);
         win_.setPosition((window_width - settings.panel_width_) / 2.0, window_height / 2.0);

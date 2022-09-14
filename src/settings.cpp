@@ -234,6 +234,18 @@ void Settings::loadFromFile(std::ifstream &in)
             if(msg == "black") choose_red_ = false;
         }
     }
+
+    {
+        auto it = document.FindMember("win-url");
+        if(it != document.MemberEnd() && it->value.IsString()) {
+            win_url_ = base_url_ + it->value.GetString();
+        }
+
+        it = document.FindMember("lose-url");
+        if(it != document.MemberEnd() && it->value.IsString() ) {
+            lose_url_ = base_url_ + it->value.GetString();
+        }
+    }
 }
 
 Settings::Settings()
@@ -288,5 +300,8 @@ Settings::Settings()
 
     button_.button_new_text_ = "新开";
     button_.button_undo_text_ = "悔棋";
+
+    win_url_ = base_url_ + "img/win/win2.png";
+    lose_url_ = base_url_ + "img/win/lose.png";
 }
 

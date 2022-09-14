@@ -32,10 +32,12 @@ void StoneMap::init()
 
     Stone::StoneColor user, computor;
     if(settings.choose_red_) {
+        player_color_ = Stone::StoneColor::Red;
         user = Stone::StoneColor::Red;
         computor = Stone::StoneColor::Black;
     }
     else {
+        player_color_ = Stone::StoneColor::Black;
         user = Stone::StoneColor::Black;
         computor = Stone::StoneColor::Red;
     }

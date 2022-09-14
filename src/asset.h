@@ -3,10 +3,13 @@
 #include <map>
 #include <cassert>
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 
 class Asset {
 private:
     std::map<std::string, sf::Texture> textures_;
+    std::map<std::string, sf::Font> fonts_;
+    std::map<std::string, sf::SoundBuffer> sounds_;
 
     static Asset * p_asset_;
 
@@ -29,6 +32,24 @@ public:
         sf::Texture &texture = textures_[url];
         assert(texture.loadFromFile(url));
         return texture;
+    }
+
+    sf::Font &getFont(const std::string &url) {
+        const auto it = fonts_.find(url);
+        if(it != fonts_.end()) 
+            return it->second;
+        sf::Font &font = fonts_[url];
+        assert(font.loadFromFile(url));
+        return font;
+    }
+
+    sf::SoundBuffer &getSound(const std::string &url) {
+        const auto it = sounds_.find(url);
+        if(it != sounds_.end()) 
+            return it->second;
+        sf::SoundBuffer &sound = sounds_[url];
+        assert(sound.loadFromFile(url));
+        return sound;
     }
 };
 #endif // CHESS_ASSET_H_

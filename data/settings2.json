@@ -10,24 +10,24 @@
         "top": 5
     },
     "board": {
-        "img":"board.png",
-        "background": "bg/bg8.jpg",
+        "img":"img/board.png",
+        "background": "img/bg/bg8.jpg",
         "river-index": 3,
-        "river-url": "river.png"
+        "river-url": "img/river.png",
+        "box-url": "img/box.png"
     },
     "stone": {
-        "background": "stone-texture/rusty_metal_02.png",
+        "background": "img/stone-texture/rusty_metal_02.png",
         "raw": 1,
         "col": 50,
         "text": "jinwen",
         "radius": 48
     },
     "choosen-color": "black",
-    "icon-url":"icon.png",
-    "box-url": "box.png",
-    "img-dir": "./resource/img/",
+    "icon-url":"img/icon.png",
+    "res-dir": "./resource/",
     "jinwen": {
-        "url": "stone-text/jinwen.png",
+        "url": "img/stone-text/jinwen.png",
         "scale": 0.650,
         "char-width": 120,
         "red-king-index": 0,
@@ -46,7 +46,7 @@
         "black-pawn-index": 10
     },
     "xiaozhuan": {
-        "url": "stone-text/xiaozhuan.png",
+        "url": "img/stone-text/xiaozhuan.png",
         "scale": 0.65,
         "char-width": 120,
         "char-height": 122,
@@ -67,5 +67,11 @@
         "black-pawn-index": 13
     },
     "panel-width" : 168,
-    "turn-label-radius": 80
+    "turn-label-radius": 80,
+    "button" : {
+        "font-url": "font/fzxkft.TTF",
+        "font-size": 45,
+        "button-new": "新开",
+        "button-undo": "悔棋"
+    }
 }

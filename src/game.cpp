@@ -25,6 +25,9 @@ void Game::processEvent()
             case sf::Event::MouseButtonPressed:
                 mouseEventHandler(event);
                 break;
+            case sf::Event::MouseMoved:
+                mouseMoveHandler(event);
+                break;
             default:
                 break;
         }
@@ -50,6 +53,9 @@ void Game::render()
     if(stone_map_.getTurn() == Stone::StoneColor::Red)
         window_.draw(turn_label_red_);
     else window_.draw(turn_label_black_);
+
+    window_.draw(new_game_button_);
+    window_.draw(undo_button_);
 
     window_.display();
 }
@@ -98,13 +104,23 @@ Game::Game() {
         float scalex = window_width / (float)board_bg_texture.getSize().x;
         float scaley = window_height / (float)board_bg_texture.getSize().y;
         float scale = scalex > scaley ? scalex : scaley;
-        if(scale > 1.0)
+        if(scale > 1.0 || scale < 0.5)
             board_background_.setScale(scale, scale);
         board_background_.setTexture(board_bg_texture);
 
         board_.setPosition(settings.padding_.left_ + settings.stone_.radius_, settings.padding_.top_ + settings.stone_.radius_);
         scale = settings.stone_.radius_ / (board_.getTexture()->getSize().x / 16.0);
         board_.setScale(scale, scale);
+
+        sf::Texture &river_texture = asset.getTexture(settings.board_.river_url_);
+        int river_height = river_texture.getSize().y / 4;
+        river_.setTexture(river_texture);
+        river_.setTextureRect(sf::IntRect(0, river_height * settings.board_.river_index_, river_texture.getSize().x, river_height));
+        river_.setOrigin(river_texture.getSize().x / 2.0, river_height / 2.0);
+        river_.setPosition((window_width - settings.panel_width_) / 2.0, window_height / 2.0);
+        river_.setColor(sf::Color(45, 45, 45, 127));
+        scale = settings.stone_.radius_ * 2.0 / (float)river_height;
+        river_.setScale(scale, scale);   
     }
     
     { // 棋子设置
@@ -136,7 +152,7 @@ Game::Game() {
     }
     
     { // 选择框设置
-        sf::Texture &box = asset.getTexture(settings.box_url_);
+        sf::Texture &box = asset.getTexture(settings.board_.box_url_);
         float scale =  (float) (settings.stone_.radius_ << 1) / box.getSize().x;
         box_select_.setTexture(box);
         box_from_.setTexture(box);
@@ -181,17 +197,32 @@ Game::Game() {
         turn_label_red_.setPosition(pos_x, pos_y);
     }
     
-    { // 楚河汉界
-        sf::Texture &river_texture = asset.getTexture(settings.board_.river_url_);
-        int river_height = river_texture.getSize().y / 4;
-        river_.setTexture(river_texture);
-        river_.setTextureRect(sf::IntRect(0, river_height * settings.board_.river_index_, river_texture.getSize().x, river_height));
-        river_.setOrigin(river_texture.getSize().x / 2.0, river_height / 2.0);
-        river_.setPosition((window_width - settings.panel_width_) / 2.0, window_height / 2.0);
-        river_.setColor(sf::Color(45, 45, 45, 127));
-        river_.setScale(0.75, 0.75);    
+    { // 控制按钮
+        sf::Font &font = asset.getFont(settings.button_.font_url_);
+        new_game_button_.setFont(font);
+        undo_button_.setFont(font);
+        new_game_button_.setString(sf::String::fromUtf8(settings.button_.button_new_text_.begin(), settings.button_.button_new_text_.end()));
+        undo_button_.setString(sf::String::fromUtf8(settings.button_.button_undo_text_.begin(), settings.button_.button_undo_text_.end()));
+
+        new_game_button_.setFillColor(sf::Color::Black);
+        undo_button_.setFillColor(sf::Color::Black);
+
+        new_game_button_.setCharacterSize(settings.button_.font_size_);
+        undo_button_.setCharacterSize(settings.button_.font_size_);
+
+        sf::FloatRect bound = new_game_button_.getLocalBounds();
+        new_game_button_.setOrigin(bound.width / 2.0, bound.height);
+        new_game_button_.setPosition(window_width - settings.panel_width_ / 2, window_height / 2);
+
+        bound = undo_button_.getLocalBounds();
+        undo_button_.setOrigin(bound.width / 2.0, 0);
+        undo_button_.setPosition(window_width - settings.panel_width_ / 2, window_height / 2);
+
+        // new_game_button_.setStyle(sf::Text::Bold );
+        // new_game_button_.setColor(sf::Color::Blue); // 已经弃用
+        // new_game_button_.setOutlineColor(sf::Color::Blue);
+        // new_game_button_.setOutlineThickness(1);
     }
-    
 }
 
 void Game::mouseEventHandler(const sf::Event &event)
@@ -207,6 +238,13 @@ void Game::mouseEventHandler(const sf::Event &event)
     if(x < settings.padding_.left_ || x > settings.padding_.left_ + r * 18 + settings.padding_.left_
         || y < settings.padding_.top_ || y > settings.padding_.top_ + r * 20)
     {
+        // 查看是否点击了按钮
+        if(new_game_button_.getGlobalBounds().contains(x, y)) {
+            std::cout << "new game" << std::endl;
+        }
+        else if(undo_button_.getGlobalBounds().contains(x, y)) {
+            std::cout << "undo" << std::endl;
+        }
         return ;
     }
 
@@ -255,4 +293,34 @@ void Game::mouseEventHandler(const sf::Event &event)
         }
     }
         
+}
+
+
+void Game::mouseMoveHandler(const sf::Event &event) {
+    Settings &settings = Settings::getInstance();
+    int x = event.mouseMove.x, y = event.mouseMove.y;
+
+    if(new_game_button_.getGlobalBounds().contains(x, y)) {
+        new_game_button_.setCharacterSize(settings.button_.font_size_ * 1.25);
+    }
+    else {
+        new_game_button_.setCharacterSize(settings.button_.font_size_);
+    }
+
+    if(undo_button_.getGlobalBounds().contains(x, y)) {
+        undo_button_.setCharacterSize(settings.button_.font_size_ * 1.25);
+    }
+    else {
+        undo_button_.setCharacterSize(settings.button_.font_size_ );
+    }
+
+    const int window_width = settings.stone_.radius_ * 2 * 9 + settings.padding_.left_ + settings.padding_.right_ + settings.panel_width_;
+    const int window_height = settings.stone_.radius_ * 2 * 10 + settings.padding_.top_ + settings.padding_.bottom_;
+    sf::FloatRect bound = new_game_button_.getLocalBounds();
+    new_game_button_.setOrigin(bound.width / 2.0, bound.height);
+    new_game_button_.setPosition(window_width - settings.panel_width_ / 2, window_height / 2);
+
+    bound = undo_button_.getLocalBounds();
+    undo_button_.setOrigin(bound.width / 2.0, 0);
+    undo_button_.setPosition(window_width - settings.panel_width_ / 2, window_height / 2);
 }

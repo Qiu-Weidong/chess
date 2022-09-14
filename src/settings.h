@@ -16,7 +16,7 @@ struct Settings {
     struct {
         std::string img_url_, background_url_;
         int river_index_;
-        std::string river_url_;
+        std::string river_url_, box_url_;
     } board_;
     struct {
         std::string background_url_;
@@ -38,7 +38,12 @@ struct Settings {
     std::string title_;
     std::string base_url_;
     std::string icon_url_;
-    std::string box_url_;
+
+    struct {
+        std::string font_url_, button_new_text_, button_undo_text_;
+        int font_size_;
+    } button_;
+    
     bool choose_red_;
     int panel_width_;
     int turn_label_radius_;

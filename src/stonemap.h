@@ -1,6 +1,7 @@
 #ifndef CHESS_STONEMAP_H_
 #define CHESS_STONEMAP_H_
 #include <array>
+#include <stack>
 #include "stone.h"
 #include "rapidjson/document.h"
 
@@ -9,11 +10,34 @@ class StoneMap {
     
 public:
     static const int stone_cnt_ = 32;
-    static const int raws = 10;
-    static const int cols = 9;
+    static const int raws_ = 10;
+    static const int cols_ = 9;
 
 private:
-    Stone *stone_map_[cols][raws];
+    struct Step {
+        struct { int x, y; } from_;
+        struct { int x, y; } to_;
+        Stone *mover_;
+        Stone *killee_;
+        Step(Stone *mover, int from_x, int from_y, int to_x, int to_y, Stone *killee=nullptr) {
+            mover_ = mover; killee_ = killee;
+            from_.x = from_x; from_.y = from_y;
+            to_.x = to_x; to_.y = to_y;
+        }
+
+        Step(Stone *mover, int dest_x, int dest_y, Stone *killee=nullptr) {
+            assert(mover);
+            mover_ = mover;
+            from_.x = mover->location_.x;
+            from_.y = mover->location_.y;
+            to_.x = dest_x;
+            to_.y = dest_y;
+            killee_ = killee;
+        }
+    };
+
+    std::stack<Step> steps_;
+    Stone *stone_map_[cols_][raws_];
     Stone *selected_stone_;
     Stone stones_[stone_cnt_];
 
@@ -36,6 +60,7 @@ private:
 
 public:
     void init(); // 初始化为开始局面
+    void regret(); // 悔棋
     Stone &operator[](int x) {
         assert(x >=0 && x < stone_cnt_);
         return stones_[x];

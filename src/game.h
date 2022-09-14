@@ -21,9 +21,13 @@ private:
     sf::Sprite river_;
     sf::Text new_game_button_, undo_button_;
 
-    void mouseEventHandler(const sf::Event &event);
+    void mouseClickedHandler(const sf::Event &event);
 
     void mouseMoveHandler(const sf::Event &event);
+
+    void openNewGame();
+
+    void updateStones();
 public:
     Game() ;
     void run();

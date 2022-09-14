@@ -23,7 +23,7 @@ void Game::processEvent()
                 window_.close();
                 break;
             case sf::Event::MouseButtonPressed:
-                mouseEventHandler(event);
+                mouseClickedHandler(event);
                 break;
             case sf::Event::MouseMoved:
                 mouseMoveHandler(event);
@@ -225,7 +225,7 @@ Game::Game() {
     }
 }
 
-void Game::mouseEventHandler(const sf::Event &event)
+void Game::mouseClickedHandler(const sf::Event &event)
 {
     if(event.mouseButton.button != sf::Mouse::Button::Left) return; // 暂时先不处理鼠标右键
     int x = event.mouseButton.x;
@@ -240,10 +240,14 @@ void Game::mouseEventHandler(const sf::Event &event)
     {
         // 查看是否点击了按钮
         if(new_game_button_.getGlobalBounds().contains(x, y)) {
-            std::cout << "new game" << std::endl;
+            // openNewGame();
+            stone_map_.init();
+            updateStones();
         }
         else if(undo_button_.getGlobalBounds().contains(x, y)) {
-            std::cout << "undo" << std::endl;
+            // std::cout << "undo" << std::endl;
+            stone_map_.regret();
+            updateStones();
         }
         return ;
     }
@@ -258,43 +262,10 @@ void Game::mouseEventHandler(const sf::Event &event)
     if((x - cx) * (x - cx) + (y - cy) * (y - cy) < r * r)
     {
         stone_map_.onBoardClicked(board_x, board_y);
-
-        // 更新box
-        if(stone_map_.getSelectedStone() != nullptr) {
-            // 选中某个棋子
-            Stone *selected = stone_map_.getSelectedStone();
-            sf::Vector2f pos(selected->location_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
-                    selected->location_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_);
-            box_select_.setPosition(pos);
-        }
-        else {
-            box_select_.setPosition(-settings.stone_.radius_, -settings.stone_.radius_);
-        }
-
-        sf::Vector2f from_pos(stone_map_.from_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
-                    stone_map_.from_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_ );
-        box_from_.setPosition(from_pos);
-        sf::Vector2f to_pos(stone_map_.to_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
-                    stone_map_.to_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_ );
-        box_to_.setPosition(to_pos);
-
-        // 更新棋子坐标
-        for(int i=0; i<StoneMap::stone_cnt_; i++) {
-            if(! stone_map_[i].alive_) {
-                stone_background_[i].setPosition(-settings.stone_.radius_, -settings.stone_.radius_);
-                stone_text_[i].setPosition(-settings.stone_.radius_, -settings.stone_.radius_);
-            }
-            else {
-                sf::Vector2f pos(stone_map_[i].location_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
-                    stone_map_[i].location_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_);
-                stone_background_[i].setPosition(pos);
-                stone_text_[i].setPosition(pos);
-            }
-        }
+        updateStones();
     }
         
 }
-
 
 void Game::mouseMoveHandler(const sf::Event &event) {
     Settings &settings = Settings::getInstance();
@@ -323,4 +294,45 @@ void Game::mouseMoveHandler(const sf::Event &event) {
     bound = undo_button_.getLocalBounds();
     undo_button_.setOrigin(bound.width / 2.0, 0);
     undo_button_.setPosition(window_width - settings.panel_width_ / 2, window_height / 2);
+}
+
+void Game::openNewGame() {
+    stone_map_.init();
+    updateStones();
+}
+
+void Game::updateStones() {
+    Settings &settings = Settings::getInstance();
+
+    // 更新box
+    if(stone_map_.getSelectedStone() != nullptr) {
+        // 选中某个棋子
+        Stone *selected = stone_map_.getSelectedStone();
+        sf::Vector2f pos(selected->location_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
+                selected->location_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_);
+        box_select_.setPosition(pos);
+    }
+    else {
+        box_select_.setPosition(-settings.stone_.radius_, -settings.stone_.radius_);
+    }
+
+    sf::Vector2f from_pos(stone_map_.from_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
+                stone_map_.from_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_ );
+    box_from_.setPosition(from_pos);
+    sf::Vector2f to_pos(stone_map_.to_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
+                stone_map_.to_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_ );
+    box_to_.setPosition(to_pos);
+    // 更新棋子坐标
+    for(int i=0; i<StoneMap::stone_cnt_; i++) {
+        if(! stone_map_[i].alive_) {
+            stone_background_[i].setPosition(-settings.stone_.radius_, -settings.stone_.radius_);
+            stone_text_[i].setPosition(-settings.stone_.radius_, -settings.stone_.radius_);
+        }
+        else {
+            sf::Vector2f pos(stone_map_[i].location_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
+                stone_map_[i].location_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_);
+            stone_background_[i].setPosition(pos);
+            stone_text_[i].setPosition(pos);
+        }
+    }
 }

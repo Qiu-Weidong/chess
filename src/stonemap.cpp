@@ -8,6 +8,8 @@ void StoneMap::init()
     memset(stones_, 0, sizeof(stones_));
     Settings &settings = Settings::getInstance();
 
+    while(! steps_.empty()) steps_.pop();
+
     int locationx[] = {
         0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 4, 2, 1, 0,
         0, 1, 2, 4, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1, 0,
@@ -58,6 +60,9 @@ void StoneMap::init()
 
     turn_ = Stone::StoneColor::Red;
     selected_stone_ = nullptr;
+
+    to_.x = to_.y = from_.x = from_.y = -2;
+
 }
 
 void StoneMap::onBoardClicked(int x, int y) {
@@ -82,8 +87,10 @@ void StoneMap::onBoardClicked(int x, int y) {
             else {
                 // 吃子
                 if(canMove(selected_stone_, x, y)) {
-                    killStone(selected_stone_, x, y);
 
+                    steps_.push(Step(selected_stone_, x, y, stone_map_[x][y]));
+                    
+                    killStone(selected_stone_, x, y);
                     switchTurn();
                 }
                 else {
@@ -96,6 +103,8 @@ void StoneMap::onBoardClicked(int x, int y) {
         else {
             // 移动
             if(canMove(selected_stone_, x, y)) {
+                steps_.push(Step(selected_stone_, x, y));
+                
                 moveStone(selected_stone_, x, y);
                 switchTurn();
             }
@@ -327,4 +336,25 @@ bool StoneMap::canPawnMove(Stone *pawn, int x, int y) {
         if(y > pawn->location_.y) return false;
         else return ! (pawn->location_.y >= 5 && pawn->location_.x != x) ; 
     }
+}
+
+void StoneMap::regret() {
+    if(steps_.empty()) return;
+    Step step = steps_.top();
+    steps_.pop();
+
+    const int from_x = step.from_.x, from_y = step.from_.y;
+    assert(! stone_map_[from_x][from_y]);
+    step.mover_->location_.x = from_x;
+    step.mover_->location_.y = from_y;
+
+    stone_map_[from_x][from_y] = step.mover_;
+    stone_map_[step.to_.x][step.to_.y] = step.killee_;
+
+    if(step.killee_) {
+        step.killee_->alive_ = true;
+    }
+
+    selected_stone_ = nullptr;
+    from_.x = from_.y = to_.x = to_.y = -2;
 }

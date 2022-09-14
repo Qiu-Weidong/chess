@@ -57,8 +57,13 @@ void Game::render()
     window_.draw(new_game_button_);
     window_.draw(undo_button_);
 
-    window_.draw(looog_);
-    window_.draw(win_);
+    if(game_over_) {
+        window_.draw(looog_);
+        if(player_win_)
+            window_.draw(win_);
+        else window_.draw(loose_);
+    }
+    
 
     window_.display();
 }
@@ -239,6 +244,12 @@ Game::Game() {
         win_.setOrigin(texture2.getSize().x / 2.0, texture2.getSize().y / 2.0);
         win_.setPosition((window_width - settings.panel_width_) / 2.0, window_height / 2.0);
         win_.setColor(sf::Color(155, 27, 27, 225));
+
+        sf::Texture &texture3 = asset.getTexture(settings.lose_url_);
+        loose_.setTexture(texture3);
+        loose_.setOrigin(texture3.getSize().x / 2.0 , texture3.getSize().y / 2.0);
+        loose_.setPosition((window_width - settings.panel_width_) / 2.0, window_height / 2.0);
+        loose_.setColor(sf::Color(37, 37, 47, 225));
     }
     
 
@@ -259,16 +270,16 @@ void Game::mouseClickedHandler(const sf::Event &event)
     {
         // 查看是否点击了按钮
         if(new_game_button_.getGlobalBounds().contains(x, y)) {
-            stone_map_.init();
-            updateStones();
+            openNewGame();
         }
-        else if(undo_button_.getGlobalBounds().contains(x, y)) {
+        else if(undo_button_.getGlobalBounds().contains(x, y) && !game_over_ ) {
             stone_map_.regret();
             updateStones();
         }
         return ;
     }
 
+    else if(game_over_) return;
     
     int board_x = (x - settings.padding_.left_) / (r << 1);
     int board_y = (y - settings.padding_.top_) / (r << 1);
@@ -314,6 +325,7 @@ void Game::mouseMoveHandler(const sf::Event &event) {
 }
 
 void Game::openNewGame() {
+    game_over_ = false;
     stone_map_.init();
     updateStones();
 }
@@ -350,6 +362,16 @@ void Game::updateStones() {
                 stone_map_[i].location_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_);
             stone_background_[i].setPosition(pos);
             stone_text_[i].setPosition(pos);
+        }
+    }
+
+    if(! stone_map_[(int)Stone::StoneID::UpKing].alive_ || ! stone_map_[(int)Stone::StoneID::DownKing].alive_) {
+        game_over_ = true;
+        if(! stone_map_[(int)Stone::StoneID::UpKing].alive_) {
+            player_win_ = true;
+        }
+        else {
+            player_win_ = false;
         }
     }
 }

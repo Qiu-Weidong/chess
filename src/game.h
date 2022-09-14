@@ -10,7 +10,7 @@
 class Game
 {
 private:
-
+    bool player_win_, game_over_;
     sf::RenderWindow window_;
     
     // map 游戏的主要逻辑

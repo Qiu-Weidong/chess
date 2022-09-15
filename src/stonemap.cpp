@@ -138,8 +138,6 @@ std::vector<Step> StoneMap::generatePossibleSteps()  {
 }
 
 int StoneMap::evaluate() const {
-    // todo 1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072 
-    // king 65536 rook 512 knight 320 pawn 128 cannon 320 bishop 256 mandarin 248
     int stone_values[] = { 65536, 248, 256, 448, 1024, 448, 128 };
     int upscore = 0, downscore = 0;
 

@@ -59,9 +59,9 @@ void Game::onBoardClicked(int x, int y) {
     }
 
     // 最后再检查一下是否结束
-    if(! stone_map_[Stone::StoneID::UpKing].alive_ || ! stone_map_[Stone::StoneID::DownKing].alive_) {
+    if(! stone_map_[StoneMap::StoneID::UpKing].alive_ || ! stone_map_[StoneMap::StoneID::DownKing].alive_) {
         game_over_ = true;
-        player_win_ = ! stone_map_[Stone::StoneID::UpKing].alive_;
+        player_win_ = ! stone_map_[StoneMap::StoneID::UpKing].alive_;
     }
 
 

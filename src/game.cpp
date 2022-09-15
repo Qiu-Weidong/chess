@@ -1,5 +1,6 @@
 #include "game.h"
 #include "settings.h"
+#include "computerplayer.h"
 
 Game::Game() {
     selected_stone_ = nullptr;
@@ -13,8 +14,10 @@ Game::Game() {
 
 void Game::onBoardClicked(int x, int y) {
     assert(x >=0 && x < StoneMap::cols_ && y >= 0 && y <= StoneMap::raws_);
+
+    if(stone_map_.getTurn() != Stone::UpOrDown::Down) return;
     
-    if(selected_stone_ == nullptr) {
+    else if(selected_stone_ == nullptr) {
         // 选择一个棋子
         if(stone_map_.getStoneOnMap(x, y) != nullptr && stone_map_.getStoneOnMap(x, y)->up_or_down_ == stone_map_.getTurn()) {
             // 选择了己方棋子
@@ -46,11 +49,24 @@ void Game::onBoardClicked(int x, int y) {
         }
     }
 
+    // 电脑走
+    if(stone_map_.getTurn() == Stone::UpOrDown::Up) {
+        ComputerPlayer player(stone_map_);
+        
+        std::cout << stone_map_ << std::endl;
+        Step step = player.play();
+        steps_.push(step);
+        stone_map_.makeMove(step);
+        from_.x = step.from_.x; from_.y = step.from_.y; to_.x = step.to_.x; to_.y = step.to_.y;
+    }
+
     // 最后再检查一下是否结束
     if(! stone_map_[Stone::StoneID::UpKing].alive_ || ! stone_map_[Stone::StoneID::DownKing].alive_) {
         game_over_ = true;
         player_win_ = ! stone_map_[Stone::StoneID::UpKing].alive_;
     }
+
+
 }
 
 

@@ -3,6 +3,8 @@
 #include <array>
 #include <stack>
 #include <array>
+#include <vector>
+#include <iostream>
 #include "stone.h"
 #include "step.h"
 
@@ -29,13 +31,25 @@ private:
     bool canCannonMove(const Step &step);
     bool canPawnMove(const Step &step);
 
-public:
-    void init(Stone::UpOrDown turn = Stone::UpOrDown::Down); // 初始化为开始局面
+    StoneMap(StoneMap &&) = delete;
+    StoneMap &operator=(StoneMap &&) = delete;
+    StoneMap(const StoneMap &map) = delete;
+    StoneMap &operator=(const StoneMap &map) = delete;
     
-    void makeMove(const Step &step);
-    void revokeMove(const Step &step);
-    bool canMove(const Step &step);
-
+    void generatePossibleStoneSteps(Stone &stone, std::vector<Step> &steps);
+    void generatePossibleKingSteps(Stone &king, std::vector<Step> &steps) ;
+    void generatePossibleMandarinSteps(Stone &mandarin, std::vector<Step> &steps) ;
+    void generatePossibleBishopSteps(Stone &bishop, std::vector<Step> &steps) ;
+    void generatePossibleKnightSteps(Stone &knight, std::vector<Step> &steps) ;
+    void generatePossibleRookSteps(Stone &rook, std::vector<Step> &steps) ;
+    void generatePossibleCannonSteps(Stone &cannon, std::vector<Step> &steps) ;
+    void generatePossiblePawnSteps(Stone &pawn, std::vector<Step> &steps) ;
+    void generatePossibleRookOrCannonSteps(Stone &stone, std::vector<Step> &steps);
+    void generatePossibleKingOrPawnSteps(Stone &stone, std::vector<Step> &steps);
+    
+public:
+    StoneMap() = default;
+    
     Stone &operator[](int index) {
         assert(index >=0 && index < stone_cnt_);
         return stones_[index];
@@ -65,7 +79,28 @@ public:
     Stone::UpOrDown getTurn() const { return turn_; }
     void switchTurn() { turn_ = turn_ == Stone::UpOrDown::Up ? Stone::UpOrDown::Down : Stone::UpOrDown::Up; }
 
-    friend class ComputerPlayer;
+
+
+    std::vector<Step> generatePossibleSteps() ;
+    int evaluate() const;
+    void init(Stone::UpOrDown turn = Stone::UpOrDown::Down); // 初始化为开始局面
+    void makeMove(const Step &step);
+    void revokeMove(const Step &step);
+    bool canMove(const Step &step);
+
+    friend std::ostream &operator<<(std::ostream &os, const StoneMap &map) {
+        
+        for(int j=0; j<StoneMap::raws_; j++) {
+            for(int i=0; i<StoneMap::cols_; i++) {
+                // os.width(5);
+                if(! map.stone_map_[i][j])
+                    os << ' ';
+                else os << (int)map.stone_map_[i][j]->stone_type_;
+            }
+            os << std::endl;
+        }
+        return os;
+    }
 };
 
 #endif // CHESS_STONEMAP_H_

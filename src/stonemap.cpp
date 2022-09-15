@@ -94,6 +94,97 @@ bool StoneMap::canMove(const Step &step) {
     
 }
 
+void StoneMap::makeMove(const Step &step) {
+    assert(step.mover_);
+    assert(stone_map_[step.from_.x][step.from_.y] == step.mover_);
+    assert(stone_map_[step.to_.x][step.to_.y] == step.killee_);
+
+    if(step.killee_)
+        step.killee_->alive_ = false;
+    stone_map_[step.from_.x][step.from_.y] = nullptr;
+    stone_map_[step.to_.x][step.to_.y] = step.mover_;
+    step.mover_->location_.x = step.to_.x;
+    step.mover_->location_.y = step.to_.y;
+
+    switchTurn();
+}
+
+void StoneMap::revokeMove(const Step &step) {
+    assert(! stone_map_[step.from_.x][step.from_.y]);
+
+    step.mover_->location_.x = step.from_.x;
+    step.mover_->location_.y = step.from_.y;
+
+    stone_map_[step.from_.x][step.from_.y] = step.mover_;
+    stone_map_[step.to_.x][step.to_.y] = step.killee_;
+
+    if(step.killee_) step.killee_->alive_ = true;
+
+    switchTurn();
+}
+
+std::vector<Step> StoneMap::generatePossibleSteps()  {
+    std::vector<Step> possible_steps;
+
+    if(turn_ == Stone::UpOrDown::Up) {
+        for(int i=0; i<16; i++) {
+            if(stones_[i].alive_)
+                generatePossibleStoneSteps(stones_[i], possible_steps);
+        }
+    }
+    else {
+        for(int i=16; i<32; i++) {
+            if(stones_[i].alive_)
+            generatePossibleStoneSteps(stones_[i], possible_steps);
+        }
+    }
+    return std::move(possible_steps);
+}
+
+int StoneMap::evaluate() const {
+    // todo
+    return 0;
+}
+
+
+// StoneMap::StoneMap(const StoneMap &map) {
+//     turn_ = map.turn_;
+
+//     // stones_ = map.stones_;
+//     std::copy(map.stones_.begin(), map.stones_.end(), stones_.begin());
+
+//     for(int i=0; i<cols_; i++) {
+//         for(int j=0; j<raws_; j++) stone_map_[i][j] = nullptr;
+//     }
+
+//     for(Stone& stone : stones_) {
+//         int x = stone.location_.x;
+//         int y = stone.location_.y;
+
+//         stone_map_[x][y] = &stone;
+//     }
+// }
+
+// StoneMap &StoneMap::operator=(const StoneMap &map) {
+//     turn_ = map.turn_;
+
+//     // stones_ = map.stones_;
+//     std::copy(map.stones_.begin(), map.stones_.end(), stones_.begin());
+
+//     for(int i=0; i<cols_; i++) {
+//         for(int j=0; j<raws_; j++) stone_map_[i][j] = nullptr;
+//     }
+
+//     for(Stone& stone : stones_) {
+//         int x = stone.location_.x;
+//         int y = stone.location_.y;
+
+//         stone_map_[x][y] = &stone;
+//     }
+//     return *this;
+// }
+
+
 bool StoneMap::isKingMeeted() {
     Stone &up_king = stones_[(int)Stone::StoneID::UpKing];
     Stone &down_king = stones_[(int)Stone::StoneID::DownKing];
@@ -109,7 +200,6 @@ bool StoneMap::isKingMeeted() {
     }
     return true;
 }
-
 bool StoneMap::canKingMove(const Step &step) {
     if(step.to_.x < 3 || step.to_.y > 5 || 
         step.mover_->up_or_down_ == Stone::UpOrDown::Up && step.to_.y > 2 ||
@@ -229,31 +319,118 @@ bool StoneMap::canPawnMove(const Step &step) {
 }
 
 
-void StoneMap::makeMove(const Step &step) {
-    assert(step.mover_);
-    assert(stone_map_[step.from_.x][step.from_.y] == step.mover_);
-    assert(stone_map_[step.to_.x][step.to_.y] == step.killee_);
-
-    if(step.killee_)
-        step.killee_->alive_ = false;
-    stone_map_[step.from_.x][step.from_.y] = nullptr;
-    stone_map_[step.to_.x][step.to_.y] = step.mover_;
-    step.mover_->location_.x = step.to_.x;
-    step.mover_->location_.y = step.to_.y;
-
-    switchTurn();
+void StoneMap::generatePossibleKingSteps(Stone &king, std::vector<Step> &steps)  {
+    generatePossibleKingOrPawnSteps(king, steps);
 }
+void StoneMap::generatePossibleMandarinSteps(Stone &mandarin, std::vector<Step> &steps)  {
+    
+    std::vector<Step> step_list ;
+    if(mandarin.up_or_down_ == Stone::UpOrDown::Up) {
+        step_list = {
+            Step(&mandarin, 3, 0, stone_map_[3][0]), Step(&mandarin, 5, 0, stone_map_[5][0]),
+            Step(&mandarin, 4, 1, stone_map_[4][1]), Step(&mandarin, 3, 2, stone_map_[3][2]),
+            Step(&mandarin, 5, 2, stone_map_[5][2]),
+        };
+    } 
+    else {
+        step_list = {
+            Step(&mandarin, 3, 7, stone_map_[3][7]), Step(&mandarin, 5, 7, stone_map_[5][7]),
+            Step(&mandarin, 4, 8, stone_map_[4][8]), Step(&mandarin, 3, 9, stone_map_[3][9]),
+            Step(&mandarin, 5, 9, stone_map_[5][9]),
+        };
+    }
+    
+    for(const Step & step : step_list) {
+        if(canMove(step)) steps.push_back(step);
+    }
+}
+void StoneMap::generatePossibleBishopSteps(Stone &bishop, std::vector<Step> &steps)  {
+    std::vector<Step> step_list;
 
-void StoneMap::revokeMove(const Step &step) {
-    assert(! stone_map_[step.from_.x][step.from_.y]);
+    if(bishop.up_or_down_ == Stone::UpOrDown::Up) {
+        step_list = {Step(&bishop, 2, 0, stone_map_[2][0]), Step(&bishop, 6, 0, stone_map_[6][0]),
+        Step(&bishop, 0, 2, stone_map_[0][2]), Step(&bishop, 4, 2, stone_map_[4][2]), 
+        Step(&bishop, 8, 2, stone_map_[8][2]), Step(&bishop, 0, 4, stone_map_[0][4]),
+        Step(&bishop, 6, 4, stone_map_[6][4]),};
+    }
+    else {
+        step_list = {
+            Step(&bishop, 2, 5, stone_map_[2][5]), Step(&bishop, 6, 5, stone_map_[6][5]),
+            Step(&bishop, 0, 7, stone_map_[0][7]), Step(&bishop, 4, 7, stone_map_[4][7]),
+            Step(&bishop, 8, 7, stone_map_[8][7]), Step(&bishop, 2, 9, stone_map_[2][9]),
+            Step(&bishop, 6, 9, stone_map_[6][9]),
+        };
+    }
+    
+    for(const Step & step : step_list) {
+        if(canMove(step)) steps.push_back(step);
+    }
 
-    step.mover_->location_.x = step.from_.x;
-    step.mover_->location_.y = step.from_.y;
+}
+void StoneMap::generatePossibleKnightSteps(Stone &knight, std::vector<Step> &steps)  {
+    const int dx[] = { 1, 1, -1, -1, 2, 2, -2, -2 };
+    const int dy[] = { 2,-2,  2, -2, 1, -1, 1, -1 };
 
-    stone_map_[step.from_.x][step.from_.y] = step.mover_;
-    stone_map_[step.to_.x][step.to_.y] = step.killee_;
+    for(int i=0; i<8; i++) {
+        int x = knight.location_.x + dx[i];
+        int y = knight.location_.y + dy[i];
+        Step step(&knight, x, y, stone_map_[x][y]);
+        if(canMove(step)) steps.push_back(step);
+    }
+}
+void StoneMap::generatePossibleRookSteps(Stone &rook, std::vector<Step> &steps)  {
+    generatePossibleRookOrCannonSteps(rook, steps);
+}
+void StoneMap::generatePossibleCannonSteps(Stone &cannon, std::vector<Step> &steps)  {
+    generatePossibleRookOrCannonSteps(cannon, steps);
+}
+void StoneMap::generatePossiblePawnSteps(Stone &pawn, std::vector<Step> &steps)  {
+    generatePossibleKingOrPawnSteps(pawn, steps);
+}
+void StoneMap::generatePossibleRookOrCannonSteps(Stone &stone, std::vector<Step> &steps) {
+    // 横向
+    for(int x=0, y=stone.location_.y; x<cols_; x++) {
+        Step step(&stone, x, y, stone_map_[x][y]);
+        if(canMove(step)) steps.push_back(step);
+    }
+    // 纵向
+    for(int y=0, x=stone.location_.x; y < raws_; y++) {
+        Step step(&stone, x, y, stone_map_[x][y]);
+        if(canMove(step)) steps.push_back(step);
+    }
+}
+void StoneMap::generatePossibleKingOrPawnSteps(Stone &stone, std::vector<Step> &steps) {
+    const int dx[] = {  1, -1,  0,  0,  };
+    const int dy[] = {  0,  0,  1, -1,  };
 
-    if(step.killee_) step.killee_->alive_ = true;
+    for(int i=0; i<4; i++) {
+        int x = stone.location_.x + dx[i];
+        int y = stone.location_.y + dy[i];
 
-    switchTurn();
+        Step step(&stone, x, y, stone_map_[x][y]);
+        if(canMove(step)) steps.push_back(step);
+    }
+}
+void StoneMap::generatePossibleStoneSteps(Stone &stone, std::vector<Step> &steps) {
+    switch(stone.stone_type_) {
+        case Stone::StoneType::King:
+        case Stone::StoneType::Pawn:
+            generatePossibleKingOrPawnSteps(stone, steps);
+            break;
+        case Stone::StoneType::Rook:
+        case Stone::StoneType::Cannon:
+            generatePossibleRookOrCannonSteps(stone, steps);
+            break;
+        case Stone::StoneType::Mandarin:
+            generatePossibleMandarinSteps(stone, steps);
+            break;
+        case Stone::StoneType::Bishop:
+            generatePossibleBishopSteps(stone, steps);
+            break;
+        case Stone::StoneType::Knight:
+            generatePossibleKnightSteps(stone, steps);
+            break;
+        default:
+            break;
+    }
 }

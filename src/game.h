@@ -62,6 +62,8 @@ public:
         steps_.pop();
 
         stone_map_.revokeMove(step);
+        from_.x = from_.y = to_.x = to_.y = -2;
+        selected_stone_ = nullptr;
     }
 
 };

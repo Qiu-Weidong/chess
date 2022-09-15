@@ -23,7 +23,7 @@
         "text": "jinwen",
         "radius": 48
     },
-    "choosen-color": "black",
+    "choosen-color": "red",
     "icon-url":"img/icon.png",
     "res-dir": "./resource/",
     "win-url": "img/win/win6.png",

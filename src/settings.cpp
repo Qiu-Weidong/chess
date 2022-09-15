@@ -246,6 +246,9 @@ void Settings::loadFromFile(std::ifstream &in)
             lose_url_ = base_url_ + it->value.GetString();
         }
     }
+
+    window_size_.width = stone_.radius_ * 2 * 9 + padding_.left_ + padding_.right_ + panel_width_;
+    window_size_.height = stone_.radius_ * 2 * 10 + padding_.top_ + padding_.bottom_;
 }
 
 Settings::Settings()
@@ -303,5 +306,8 @@ Settings::Settings()
 
     win_url_ = base_url_ + "img/win/win2.png";
     lose_url_ = base_url_ + "img/win/lose.png";
+
+    window_size_.width = stone_.radius_ * 2 * 9 + padding_.left_ + padding_.right_ + panel_width_;
+    window_size_.height = stone_.radius_ * 2 * 10 + padding_.top_ + padding_.bottom_;
 }
 

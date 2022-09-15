@@ -1,7 +1,6 @@
 #include <fstream>
-#include <iostream>
-#include "game.h"
 #include "settings.h"
+#include "app.h"
 
 int main(int argc, const char **argv)
 {
@@ -11,8 +10,7 @@ int main(int argc, const char **argv)
     Settings &settings = Settings::getInstance();
     if(in.is_open()) settings.loadFromFile(in);
     
-    Game().run();
-    return 0;
+    return App().exec();
 
     // // int abc = 185;
     // sf::Image img;

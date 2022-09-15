@@ -14,6 +14,9 @@ struct Settings {
         int left_, top_;
     } window_position_;
     struct {
+        int width, height;
+    } window_size_;
+    struct {
         std::string img_url_, background_url_;
         int river_index_;
         std::string river_url_, box_url_;

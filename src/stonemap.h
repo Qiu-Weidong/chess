@@ -16,60 +16,54 @@ public:
     
     using StoneArray = std::array<Stone, stone_cnt_>;
 private:
-    
     Stone *stone_map_[cols_][raws_];
     StoneArray stones_;
+    Stone::UpOrDown turn_;
     
-    std::stack<Step> steps_;
-    Stone *selected_stone_;
-    Stone::StoneColor player_color_;
-    Stone::StoneColor turn_;
-
-    void moveStone(Stone *mover, int x, int y);
-    void killStone(Stone *killer, int x, int y);
-
     bool isKingMeeted();
-
-    bool canMove(Stone *mover, int x, int y);
-    bool canKingMove(Stone *king, int x, int y);
-    bool canMandarinMove(Stone *mandarin, int x, int y);
-    bool canBishopMove(Stone *bishop, int x, int y);
-    bool canKnightMove(Stone *knight, int x, int y);
-    bool canRookMove(Stone *rook, int x, int y);
-    bool canCannonMove(Stone *cannon, int x, int y);
-    bool canPawnMove(Stone *pawn, int x, int y);
+    bool canKingMove(const Step &step);
+    bool canMandarinMove(const Step &step);
+    bool canBishopMove(const Step &step);
+    bool canKnightMove(const Step &step);
+    bool canRookMove(const Step &step);
+    bool canCannonMove(const Step &step);
+    bool canPawnMove(const Step &step);
 
 public:
-    void init(); // 初始化为开始局面
-    void regret(); // 悔棋
-    Stone &operator[](int x) {
-        assert(x >=0 && x < stone_cnt_);
-        return stones_[x];
+    void init(Stone::UpOrDown turn = Stone::UpOrDown::Down); // 初始化为开始局面
+    
+    void makeMove(const Step &step);
+    void revokeMove(const Step &step);
+    bool canMove(const Step &step);
+
+    Stone &operator[](int index) {
+        assert(index >=0 && index < stone_cnt_);
+        return stones_[index];
     }
 
-    Stone &get(int x) {
-        assert(x >=0 && x < stone_cnt_);
-        return stones_[x];
+    Stone &operator[](Stone::StoneID id) {
+        return stones_[(int)id];
     }
 
-    Stone::StoneColor getPlayerColor() const { return player_color_; }
-    Stone::StoneColor getTurn() const { return turn_; }
+    Stone &get(int index) {
+        assert(index >= index && index < stone_cnt_);
+        return stones_[index];
+    }
+
+    Stone &get(Stone::StoneID id) { return stones_[(int)id]; }
+
+    Stone *getStoneOnMap(int x, int y) const {
+        if(x < 0 || x > cols_ || y < 0 || y > raws_) return nullptr;
+        else return stone_map_[x][y];
+    }
 
     const StoneArray &getAllStones() const {
         return stones_;
     }
 
-    Stone *getSelectedStone() const {
-        return selected_stone_;
-    }
-
-    void setPlayerColor(Stone::StoneColor color) { player_color_ = color; }
-    void setTurn(Stone::StoneColor color) { turn_ = color; }
-    void switchTurn() { turn_ = turn_ == Stone::StoneColor::Red ? Stone::StoneColor::Black : Stone::StoneColor::Red; /*selected_stone_ = nullptr;*/ }
-
-    void onBoardClicked(int x, int y) ; // x、y为棋盘坐标
-    
-    struct { int x, y; } from_, to_;
+    void setTurn(Stone::UpOrDown turn) { turn_ = turn; }
+    Stone::UpOrDown getTurn() const { return turn_; }
+    void switchTurn() { turn_ = turn_ == Stone::UpOrDown::Up ? Stone::UpOrDown::Down : Stone::UpOrDown::Up; }
 
     friend class ComputerPlayer;
 };

@@ -52,7 +52,9 @@ struct Stone {
         DownMandarinLeft,
         DownBishopLeft,
         DownKnightLeft,
-        DownRookLeft
+        DownRookLeft,
+        
+        None = -1,
     };
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -71,11 +73,6 @@ struct Stone {
         Pawn
     };
 
-    enum class StoneColor
-    {
-        Red,
-        Black
-    };
     enum class UpOrDown
     {
         Up,
@@ -84,7 +81,6 @@ struct Stone {
 
     StoneType stone_type_;
     bool alive_;
-    StoneColor color_;
     UpOrDown up_or_down_;
     struct { int x, y; } location_;
 };

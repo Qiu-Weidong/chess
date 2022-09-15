@@ -138,8 +138,20 @@ std::vector<Step> StoneMap::generatePossibleSteps()  {
 }
 
 int StoneMap::evaluate() const {
-    // todo
-    return 0;
+    // todo 1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072 
+    // king 65536 rook 512 knight 320 pawn 128 cannon 320 bishop 256 mandarin 248
+    int stone_values[] = { 65536, 248, 256, 320, 512, 320, 128 };
+    int upscore = 0, downscore = 0;
+
+    // 子力评估
+    for(const auto &stone : stones_) {
+        if(! stone.alive_ ) continue;
+        stone.up_or_down_ == Stone::UpOrDown::Up ? upscore += stone_values[(int)stone.stone_type_] :
+            downscore += stone_values[(int)stone.stone_type_];
+    }
+
+    
+    return upscore - downscore ;
 }
 
 bool StoneMap::isKingMeeted() {
@@ -158,7 +170,7 @@ bool StoneMap::isKingMeeted() {
     return true;
 }
 bool StoneMap::canKingMove(const Step &step) {
-    if(step.to_.x < 3 || step.to_.y > 5 || 
+    if(step.to_.x < 3 || step.to_.x > 5 || 
         step.mover_->up_or_down_ == Stone::UpOrDown::Up && step.to_.y > 2 ||
         step.mover_->up_or_down_ == Stone::UpOrDown::Down && step.to_.y < 7) return false;
     

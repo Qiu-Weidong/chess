@@ -9,12 +9,12 @@ class ComputerPlayer {
     StoneMap &map_;
     int max_depth_;
 
-    int getMax(int current_depth) ;
+    int getMax(int current_depth, int alpha, int beta) ;
 
-    int getMin(int current_depth) ;
+    int getMin(int current_depth, int alpha, int beta) ;
     
 public:
-    ComputerPlayer(StoneMap &map) : map_(map) { max_depth_ = 2; }
+    ComputerPlayer(StoneMap &map) : map_(map) { max_depth_ = 4; }
     Step play(); 
 
 };

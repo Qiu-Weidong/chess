@@ -52,11 +52,11 @@ void Game::onBoardClicked(int x, int y) {
     // 电脑走
     if(stone_map_.getTurn() == Stone::UpOrDown::Up) {
         ComputerPlayer player(stone_map_);
-        
-        std::cout << stone_map_ << std::endl;
         Step step = player.play();
         steps_.push(step);
         stone_map_.makeMove(step);
+
+        // std::cout << stone_map_.evaluate() << std::endl; 
         from_.x = step.from_.x; from_.y = step.from_.y; to_.x = step.to_.x; to_.y = step.to_.y;
     }
 

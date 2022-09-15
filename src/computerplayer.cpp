@@ -7,22 +7,21 @@ Step ComputerPlayer::play() {
     std::vector<Step> best_steps;
     std::vector<Step> possible_steps = map_.generatePossibleSteps();
 
-    int bestvalue = 0x80000000;
+    int alpha = 0x80000000, beta = 0x7fffffff;
 
     for(const auto &step : possible_steps) {
         map_.makeMove(step);
-        int value = getMin(max_depth_ - 1);
-
+        int value = getMin(max_depth_ - 1, alpha, beta);
         map_.revokeMove(step);
 
-        if(value > bestvalue) {
-            bestvalue = value;
+        if(value > alpha) {
+            assert(alpha < beta);
+            alpha = value;
             best_steps.clear();
             best_steps.push_back(step);
-        }
-        else if(value == bestvalue) {
-            best_steps.push_back(step);
-        }
+        } //else if(value == alpha) {
+        //     best_steps.push_back(step);
+        // }
     }
 
     if(best_steps.size() > 1) {
@@ -32,37 +31,41 @@ Step ComputerPlayer::play() {
     return best_steps[0];
 
 }
-
-int ComputerPlayer::getMin(int current_depth) {
+// 获取最小值，但不能小于alpha
+int ComputerPlayer::getMin(int current_depth, int alpha, int beta) {
     if(current_depth <= 0) return map_.evaluate();
 
     std::vector<Step> possible_steps = map_.generatePossibleSteps();
-    int bestvalue = 0x7fffffff;
 
     for(const auto &step : possible_steps) {
         map_.makeMove(step);
-        int value = getMax(current_depth - 1);
+        int value = getMax(current_depth - 1, alpha, beta);
         map_.revokeMove(step);
 
-        if(value < bestvalue) bestvalue = value;
+        if(value < beta) {
+            beta = value;
+            if(alpha >= beta)
+                return alpha;
+        }
     }
-    return bestvalue;
+    return beta;
 }
-
-int ComputerPlayer::getMax(int current_depth) {
+// 获取最大值，但不能超过beta
+int ComputerPlayer::getMax(int current_depth, int alpha, int beta) {
     if(current_depth <= 0) return map_.evaluate();
 
     std::vector<Step> possible_steps = map_.generatePossibleSteps();
 
-    int bestvalue = 0x80000000;
-
     for(const auto &step : possible_steps) {
         map_.makeMove(step);
-        int value = getMin(current_depth - 1);
+        int value = getMin(current_depth - 1, alpha, beta);
         map_.revokeMove(step);
-        if(value > bestvalue) bestvalue = value;
+        if(value > alpha)  {
+            alpha = value;
+            if(alpha >= beta) return beta;
+        }
     }
-    return bestvalue;
+    return alpha;
 }
 
 

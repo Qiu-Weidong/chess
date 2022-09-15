@@ -17,6 +17,59 @@ public:
     static const int cols_ = 9;
     
     using StoneArray = std::array<Stone, stone_cnt_>;
+    ////////////////////////////////////////////////////////////////////////////////////
+    /// \brief 用于对棋子进行编号
+    /// ____________________________________        ___________________________________
+    /// |00--01--02--03--04--05--06--07--08|        |00  01  02  03  04  05  06  07  08|
+    /// |----------------------------------|        |                                  |
+    /// |----0E----------------------0A----|        |    14                      10    |
+    /// |0F------0D------0C------0B------09|        |15______13______12______11______09|
+    /// |              river               |        |            楚河汉界               |
+    /// |10------12------13------14------16|        |16￣￣￣18￣￣￣￣19￣￣￣20￣￣￣22|
+    /// |----11----------------------15----|        |    17                      21    |
+    /// |----------------------------------|        |                                  |
+    /// |1F--1E--1D--1C--1B--1A--19--18--17|        |31  30  29  28  27  26  25  24  23|
+    /// ￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣         ￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣
+    /////////////////////////////////////////////////////////////////////////////////////
+    enum class StoneID
+    {
+        UpRookLeft = 0,
+        UpKnightLeft,
+        UpBishopLeft,
+        UpMandarinLeft,
+        UpKing,
+        UpMandarinRight,
+        UpBishopRight,
+        UpKnightRight,
+        UpRookRight,
+        UpPawnRight,
+        UpCannonRight,
+        UpPawnMidRight,
+        UpPawnMiddle,
+        UpPawnMidLeft,
+        UpCannonLeft,
+        UpPawnLeft,
+
+        DownPawnLeft,
+        DownCannonLeft,
+        DownPawnMidLeft,
+        DownPawnMiddle,
+        DownPawnMidRight,
+        DownCannonRight,
+        DownPawnRight,
+        DownRookRight,
+        DownKnightRight,
+        DownBishopRight,
+        DownMandarinRight,
+        DownKing,
+        DownMandarinLeft,
+        DownBishopLeft,
+        DownKnightLeft,
+        DownRookLeft,
+        
+        None = -1,
+    };
+
 private:
     Stone *stone_map_[cols_][raws_];
     StoneArray stones_;
@@ -55,7 +108,7 @@ public:
         return stones_[index];
     }
 
-    Stone &operator[](Stone::StoneID id) {
+    Stone &operator[](StoneID id) {
         return stones_[(int)id];
     }
 
@@ -64,7 +117,7 @@ public:
         return stones_[index];
     }
 
-    Stone &get(Stone::StoneID id) { return stones_[(int)id]; }
+    Stone &get(StoneID id) { return stones_[(int)id]; }
 
     Stone *getStoneOnMap(int x, int y) const {
         if(x < 0 || x > cols_ || y < 0 || y > raws_) return nullptr;

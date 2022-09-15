@@ -55,8 +55,6 @@ void Game::onBoardClicked(int x, int y) {
         Step step = player.play();
         steps_.push(step);
         stone_map_.makeMove(step);
-
-        // std::cout << stone_map_.evaluate() << std::endl; 
         from_.x = step.from_.x; from_.y = step.from_.y; to_.x = step.to_.x; to_.y = step.to_.y;
     }
 

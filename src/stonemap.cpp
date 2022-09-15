@@ -126,18 +126,14 @@ void StoneMap::revokeMove(const Step &step) {
 std::vector<Step> StoneMap::generatePossibleSteps()  {
     std::vector<Step> possible_steps;
 
-    if(turn_ == Stone::UpOrDown::Up) {
-        for(int i=0; i<16; i++) {
-            if(stones_[i].alive_)
-                generatePossibleStoneSteps(stones_[i], possible_steps);
-        }
-    }
-    else {
-        for(int i=16; i<32; i++) {
-            if(stones_[i].alive_)
+    int st = Stone::UpOrDown::Up == turn_ ? 0 : 16;
+    int ed = Stone::UpOrDown::Up == turn_ ? 16 : 32;
+
+    for(int i=st; i<ed; i++) {
+        if(stones_[i].alive_)
             generatePossibleStoneSteps(stones_[i], possible_steps);
-        }
     }
+
     return std::move(possible_steps);
 }
 
@@ -145,45 +141,6 @@ int StoneMap::evaluate() const {
     // todo
     return 0;
 }
-
-
-// StoneMap::StoneMap(const StoneMap &map) {
-//     turn_ = map.turn_;
-
-//     // stones_ = map.stones_;
-//     std::copy(map.stones_.begin(), map.stones_.end(), stones_.begin());
-
-//     for(int i=0; i<cols_; i++) {
-//         for(int j=0; j<raws_; j++) stone_map_[i][j] = nullptr;
-//     }
-
-//     for(Stone& stone : stones_) {
-//         int x = stone.location_.x;
-//         int y = stone.location_.y;
-
-//         stone_map_[x][y] = &stone;
-//     }
-// }
-
-// StoneMap &StoneMap::operator=(const StoneMap &map) {
-//     turn_ = map.turn_;
-
-//     // stones_ = map.stones_;
-//     std::copy(map.stones_.begin(), map.stones_.end(), stones_.begin());
-
-//     for(int i=0; i<cols_; i++) {
-//         for(int j=0; j<raws_; j++) stone_map_[i][j] = nullptr;
-//     }
-
-//     for(Stone& stone : stones_) {
-//         int x = stone.location_.x;
-//         int y = stone.location_.y;
-
-//         stone_map_[x][y] = &stone;
-//     }
-//     return *this;
-// }
-
 
 bool StoneMap::isKingMeeted() {
     Stone &up_king = stones_[(int)Stone::StoneID::UpKing];
@@ -209,7 +166,7 @@ bool StoneMap::canKingMove(const Step &step) {
         (step.from_.y - step.to_.y) * (step.from_.y - step.to_.y) == 1) ;
 }
 bool StoneMap::canMandarinMove(const Step &step) {
-    if(step.to_.x < 3 || step.to_.y > 5 || 
+    if(step.to_.x < 3 || step.to_.x > 5 || 
         step.mover_->up_or_down_ == Stone::UpOrDown::Up && step.to_.y > 2 ||
         step.mover_->up_or_down_ == Stone::UpOrDown::Down && step.to_.y < 7) return false;
     else return ((step.from_.x - step.to_.x) * (step.from_.x - step.to_.x) + 

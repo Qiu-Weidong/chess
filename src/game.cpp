@@ -51,16 +51,10 @@ void Game::onBoardClicked(int x, int y) {
 
     // 电脑走
     if(stone_map_.getTurn() == Stone::UpOrDown::Up) {
-        // ComputerPlayer player(stone_map_);
         ComputerPlayer player;
-
-        std::cout << "game.cpp: \n" << stone_map_ << std::endl;
         player.setStoneMap(stone_map_);
 
         Step step = player.play();
-
-        // assert(step.mover_ == stone_map_.getStoneOnMap(step.from_.x, step.from_.y));
-        // assert(step.killee_ == stone_map_.getStoneOnMap(step.to_.x, step.to_.y));
 
         step.mover_ = stone_map_.getStoneOnMap(step.from_.x, step.from_.y);
         step.killee_ = stone_map_.getStoneOnMap(step.to_.x, step.to_.y);

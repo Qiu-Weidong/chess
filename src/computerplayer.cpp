@@ -3,7 +3,6 @@
 
 
 Step ComputerPlayer::play() {
-    std::cout << "play: \n" << map_ << std::endl;
     std::vector<Step> best_steps;
     std::vector<Step> possible_steps = map_.generatePossibleSteps();
     int alpha = -inf - max_depth_ - 1, beta = inf + max_depth_ + 1;

@@ -15,7 +15,7 @@ class ComputerPlayer {
     
 public:
     // ComputerPlayer(StoneMap &map) : map_(map) { max_depth_ = 5; }
-    void setStoneMap(const StoneMap &map) { map_ = map; max_depth_ = 2; }
+    void setStoneMap(const StoneMap &map) { map_ = map; max_depth_ = 4; }
     Step play(); 
 
 };

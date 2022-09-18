@@ -8,7 +8,8 @@ include_directories(
         "${CMAKW_SOURCE_DIR}\\src"
 )
 link_directories(
-        "C:\\Users\\56838\\Downloads\\SFML-2.5.1-sources\\SFML-2.5.1\\build\\lib"
+        # "C:\\Users\\56838\\Downloads\\SFML-2.5.1-sources\\SFML-2.5.1\\build\\lib"
+        "C:\\Users\\56838\\Downloads\\SFML-2.5.1-sources\\SFML-2.5.1\\release\\lib"
         # "C:\\Program Files (x86)\\SFML\\lib"
 )
 

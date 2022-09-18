@@ -41,7 +41,7 @@ public:
 
     void checkComputerStep() {
         auto &future = player_.getStep();
-        std::future_status status = future.wait_for(std::chrono::milliseconds(300));
+        std::future_status status = future.wait_for(std::chrono::milliseconds(30));
         if(status != std::future_status::ready) return;
 
         Step step = player_.getStep().get();
@@ -52,9 +52,9 @@ public:
         from_.x = step.from_.x; from_.y = step.from_.y; to_.x = step.to_.x; to_.y = step.to_.y;
 
         if(! stone_map_[StoneMap::StoneID::UpKing].alive_ || ! stone_map_[StoneMap::StoneID::DownKing].alive_) {
-        game_over_ = true;
-        player_win_ = ! stone_map_[StoneMap::StoneID::UpKing].alive_;
-    }
+            game_over_ = true;
+            player_win_ = ! stone_map_[StoneMap::StoneID::UpKing].alive_;
+        }
     }
 
     Stone *getSelectedStone() const { return selected_stone_; }
@@ -80,13 +80,20 @@ public:
     }
 
     void regret() {
-        if(steps_.empty()) return ;
-        Step step = steps_.top();
-        steps_.pop();
-
-        stone_map_.revokeMove(step);
+        // 需要判断一下电脑走没有
+        if(isComputerTurn() || steps_.empty()) return;
+        
         from_.x = from_.y = to_.x = to_.y = -2;
         selected_stone_ = nullptr;
+
+        Step step = steps_.top();
+        steps_.pop();
+        stone_map_.revokeMove(step);
+        
+        if(steps_.empty() ) return ;
+        step = steps_.top();
+        steps_.pop();
+        stone_map_.revokeMove(step);
     }
 
 };

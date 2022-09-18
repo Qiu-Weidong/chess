@@ -93,11 +93,6 @@ bool StoneMap::canMove(const Step &step) {
 
 void StoneMap::makeMove(const Step &step) {
     assert(step.mover_);
-    if(stone_map_[step.from_.x][step.from_.y] != step.mover_) {
-        std::cout << *this << std::endl;
-        std::cout << step.from_.x << ", " << step.from_.y << std::endl;
-        std::cout << step.to_.x << ", " << step.to_.y << std::endl;
-    }
     assert(stone_map_[step.from_.x][step.from_.y] == step.mover_);
     assert(stone_map_[step.to_.x][step.to_.y] == step.killee_);
 

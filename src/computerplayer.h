@@ -17,7 +17,16 @@ class ComputerPlayer {
     int getMin(int current_depth, int alpha, int beta) ;
     
 public:
-    void setStoneMap(const StoneMap &map) { map_ = map; max_depth_ = 5; }
+    void setStoneMap(const StoneMap &map) { 
+        map_ = map; 
+
+        int cnt = 0;
+        for(int i=0; i<StoneMap::stone_cnt_; i++) {
+            if(map_[i].alive_) cnt++;
+        }
+
+        max_depth_ = (82 - cnt) / 10; 
+    }
     void playAsync() {
         auto func = std::bind(&ComputerPlayer::play, this);
         step_ = std::async(std::launch::async, func);

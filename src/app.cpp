@@ -105,7 +105,6 @@ void App::update() {
     }
 
     if(!game_.isGameOver() && game_.isComputerTurn()) {
-        std::cout << "." ;
         game_.checkComputerStep();
     }
 }
@@ -211,6 +210,7 @@ App::App() {
         sf::Image icon;
         icon.loadFromFile(settings.icon_url_);
         window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+        window_.setFramerateLimit(24);
     }
     
     { // 棋盘设置

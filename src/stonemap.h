@@ -87,7 +87,6 @@ private:
     StoneMap(StoneMap &&) = delete;
     StoneMap &operator=(StoneMap &&) = delete;
     StoneMap(const StoneMap &map) = delete;
-    StoneMap &operator=(const StoneMap &map) = delete;
     
     void generatePossibleStoneSteps(Stone &stone, std::vector<Step> &steps);
     void generatePossibleKingSteps(Stone &king, std::vector<Step> &steps) ;
@@ -100,8 +99,15 @@ private:
     void generatePossibleRookOrCannonSteps(Stone &stone, std::vector<Step> &steps);
     void generatePossibleKingOrPawnSteps(Stone &stone, std::vector<Step> &steps);
     
+    inline void clearStoneMap() {
+        for(int i=0; i<cols_; i++) {
+            for(int j=0; j<raws_; j++) stone_map_[i][j] = nullptr;
+        }
+    }
+    
 public:
     StoneMap() = default;
+    StoneMap &operator=(const StoneMap &map) ;
     
     Stone &operator[](int index) {
         assert(index >=0 && index < stone_cnt_);
@@ -142,16 +148,15 @@ public:
     bool canMove(const Step &step);
 
     friend std::ostream &operator<<(std::ostream &os, const StoneMap &map) {
-        
+        os << "__________________________________________________________________________________________\n";
         for(int j=0; j<StoneMap::raws_; j++) {
             for(int i=0; i<StoneMap::cols_; i++) {
-                // os.width(5);
-                if(! map.stone_map_[i][j])
-                    os << ' ';
-                else os << (int)map.stone_map_[i][j]->stone_type_;
+                if(map.stone_map_[i][j] == nullptr) os << "|        |";
+                else os << *map.stone_map_[i][j];
             }
             os << std::endl;
         }
+        os << "------------------------------------------------------------------------------------------\n";
         return os;
     }
 };

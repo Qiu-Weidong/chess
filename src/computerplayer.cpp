@@ -3,7 +3,7 @@
 
 
 Step ComputerPlayer::play() {
-
+    std::cout << "play: \n" << map_ << std::endl;
     std::vector<Step> best_steps;
     std::vector<Step> possible_steps = map_.generatePossibleSteps();
     int alpha = -inf - max_depth_ - 1, beta = inf + max_depth_ + 1;
@@ -56,7 +56,6 @@ int ComputerPlayer::getMax(int current_depth, int alpha, int beta) {
     if(current_depth <= 0) return map_.evaluate();
     else if(! map_[(int)StoneMap::StoneID::UpKing].alive_) return -inf - current_depth;
     else if(! map_[(int)StoneMap::StoneID::DownKing].alive_) return inf + current_depth;
-    if(current_depth <= 0) return map_.evaluate();
 
     std::vector<Step> possible_steps = map_.generatePossibleSteps();
 

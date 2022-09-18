@@ -114,7 +114,7 @@ void App::mouseClickedHandler(sf::Event &event) {
     const int r = settings.stone_.radius_;
     
     // 点击到棋盘外面
-    if(x < settings.padding_.left_ || x > settings.padding_.left_ + r * 18 + settings.padding_.left_
+    if(x < settings.padding_.left_ || x > settings.padding_.left_ + r * 18 
         || y < settings.padding_.top_ || y > settings.padding_.top_ + r * 20)
     {
         // 查看是否点击了按钮

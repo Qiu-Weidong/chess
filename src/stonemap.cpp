@@ -4,10 +4,7 @@
 
 void StoneMap::init(Stone::UpOrDown turn)
 {  
-    for(int i=0; i<cols_; i++) {
-        for(int j=0; j<raws_; j++) stone_map_[i][j] = nullptr;
-    }
-
+    clearStoneMap();
     int locationx[] = {
         0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 4, 2, 1, 0,
         0, 1, 2, 4, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1, 0,
@@ -96,6 +93,11 @@ bool StoneMap::canMove(const Step &step) {
 
 void StoneMap::makeMove(const Step &step) {
     assert(step.mover_);
+    if(stone_map_[step.from_.x][step.from_.y] != step.mover_) {
+        std::cout << *this << std::endl;
+        std::cout << step.from_.x << ", " << step.from_.y << std::endl;
+        std::cout << step.to_.x << ", " << step.to_.y << std::endl;
+    }
     assert(stone_map_[step.from_.x][step.from_.y] == step.mover_);
     assert(stone_map_[step.to_.x][step.to_.y] == step.killee_);
 
@@ -150,6 +152,20 @@ int StoneMap::evaluate() const {
 
     
     return upscore - downscore ;
+}
+
+StoneMap &StoneMap::operator=(const StoneMap &map) {
+    clearStoneMap();
+
+    turn_ = map.turn_;
+
+    for(int i=0; i<stone_cnt_;i++) {
+        stones_[i] = map.stones_[i];
+        int x = stones_[i].location_.x, y = stones_[i].location_.y;
+        if(stones_[i].alive_)
+            stone_map_[x][y] = &stones_[i];
+    }
+    return *this;
 }
 
 bool StoneMap::isKingMeeted() {

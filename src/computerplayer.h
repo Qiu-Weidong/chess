@@ -6,7 +6,7 @@
 
 class ComputerPlayer {
     static const int inf = 0x3f3f3f3f;
-    StoneMap &map_;
+    StoneMap map_;
     int max_depth_;
 
     int getMax(int current_depth, int alpha, int beta) ;
@@ -14,7 +14,8 @@ class ComputerPlayer {
     int getMin(int current_depth, int alpha, int beta) ;
     
 public:
-    ComputerPlayer(StoneMap &map) : map_(map) { max_depth_ = 5; }
+    // ComputerPlayer(StoneMap &map) : map_(map) { max_depth_ = 5; }
+    void setStoneMap(const StoneMap &map) { map_ = map; max_depth_ = 2; }
     Step play(); 
 
 };

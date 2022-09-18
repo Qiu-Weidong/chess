@@ -16,6 +16,6 @@ link_directories(
 add_executable(chess WIN32
         src/main.cpp src/game.cpp src/game.h src/stone.h src/stonemap.cpp src/stonemap.h
         src/settings.h src/settings.cpp src/asset.h src/asset.cpp src/app.h src/app.cpp
-        src/computerplayer.h src/computerplayer.cpp
+        src/computerplayer.h src/computerplayer.cpp src/icon.rc 
 )
 target_link_libraries(chess sfml-audio sfml-window sfml-system sfml-network sfml-main sfml-graphics)

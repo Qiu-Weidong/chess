@@ -14,6 +14,7 @@ Game::Game() {
 
 void Game::onBoardClicked(int x, int y) {
     assert(x >=0 && x < StoneMap::cols_ && y >= 0 && y < StoneMap::raws_);
+    from_.x = from_.y = to_.x = to_.y = -2;
 
     if(stone_map_.getTurn() != Stone::UpOrDown::Down) return;
     
@@ -49,19 +50,7 @@ void Game::onBoardClicked(int x, int y) {
         }
     }
 
-    // 电脑走
-    if(stone_map_.getTurn() == Stone::UpOrDown::Up) {
-        ComputerPlayer player;
-        player.setStoneMap(stone_map_);
-
-        Step step = player.play();
-
-        step.mover_ = stone_map_.getStoneOnMap(step.from_.x, step.from_.y);
-        step.killee_ = stone_map_.getStoneOnMap(step.to_.x, step.to_.y);
-        steps_.push(step);
-        stone_map_.makeMove(step);
-        from_.x = step.from_.x; from_.y = step.from_.y; to_.x = step.to_.x; to_.y = step.to_.y;
-    }
+    
 
     // 最后再检查一下是否结束
     if(! stone_map_[StoneMap::StoneID::UpKing].alive_ || ! stone_map_[StoneMap::StoneID::DownKing].alive_) {
@@ -69,7 +58,11 @@ void Game::onBoardClicked(int x, int y) {
         player_win_ = ! stone_map_[StoneMap::StoneID::UpKing].alive_;
     }
 
-
+    // 电脑走
+    if(stone_map_.getTurn() == Stone::UpOrDown::Up) {
+        player_.setStoneMap(stone_map_);
+        player_.playAsync();
+    }
 }
 
 

@@ -1,5 +1,6 @@
 #include "computerplayer.h"
 #include <iostream>
+#include <vector>
 
 
 Step ComputerPlayer::play() {

@@ -6,6 +6,7 @@
 int App::exec() {
     while(window_.isOpen()) {
         processEvent();
+        update();
         render();
     }
     return 0;
@@ -67,6 +68,11 @@ void App::render() {
 }
 
 void App::update() {
+    
+    if(game_.isComputerTurn()) {
+        std::cout << "." ;
+        game_.computerPlay();
+    }
     Settings &settings = Settings::getInstance();
 
     // 更新box
@@ -139,8 +145,8 @@ void App::mouseClickedHandler(sf::Event &event) {
             game_.onBoardClicked(board_x, board_y);
         }
     }
-    
-    update();
+    std::cout << "mouseclickedhandler returned" << std::endl;
+    // update();
     
 }
 

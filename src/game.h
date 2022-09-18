@@ -3,6 +3,7 @@
 #include <map>
 #include <array>
 #include "stonemap.h"
+#include "computerplayer.h"
 #include "SFML/Graphics.hpp"
 
 
@@ -21,6 +22,8 @@ private:
     std::stack<Step> steps_;
     Stone *selected_stone_;
     StoneColor player_color_;
+
+    ComputerPlayer player_;
 public:
     Game();
 
@@ -32,6 +35,21 @@ public:
 
     bool isPlayerTurn() const {
         return stone_map_.getTurn() == Stone::UpOrDown::Down;
+    }
+
+    bool isComputerTurn() const { return ! isPlayerTurn(); }
+
+    void computerPlay() {
+        auto &future = player_.getStep();
+        std::future_status status = future.wait_for(std::chrono::milliseconds(300));
+        if(status != std::future_status::ready) return;
+        
+        Step step = player_.getStep().get();
+        step.mover_ = stone_map_.getStoneOnMap(step.from_.x, step.from_.y);
+        step.killee_ = stone_map_.getStoneOnMap(step.to_.x, step.to_.y);
+        steps_.push(step);
+        stone_map_.makeMove(step);
+        from_.x = step.from_.x; from_.y = step.from_.y; to_.x = step.to_.x; to_.y = step.to_.y;
     }
 
     Stone *getSelectedStone() const { return selected_stone_; }

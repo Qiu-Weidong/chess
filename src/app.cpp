@@ -68,11 +68,6 @@ void App::render() {
 }
 
 void App::update() {
-    
-    if(game_.isComputerTurn()) {
-        std::cout << "." ;
-        game_.computerPlay();
-    }
     Settings &settings = Settings::getInstance();
 
     // 更新box
@@ -109,6 +104,10 @@ void App::update() {
         }
     }
 
+    if(!game_.isGameOver() && game_.isComputerTurn()) {
+        std::cout << "." ;
+        game_.checkComputerStep();
+    }
 }
 
 void App::mouseClickedHandler(sf::Event &event) {
@@ -145,8 +144,6 @@ void App::mouseClickedHandler(sf::Event &event) {
             game_.onBoardClicked(board_x, board_y);
         }
     }
-    std::cout << "mouseclickedhandler returned" << std::endl;
-    // update();
     
 }
 

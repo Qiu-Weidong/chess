@@ -50,8 +50,6 @@ void Game::onBoardClicked(int x, int y) {
         }
     }
 
-    
-
     // 最后再检查一下是否结束
     if(! stone_map_[StoneMap::StoneID::UpKing].alive_ || ! stone_map_[StoneMap::StoneID::DownKing].alive_) {
         game_over_ = true;
@@ -59,7 +57,7 @@ void Game::onBoardClicked(int x, int y) {
     }
 
     // 电脑走
-    if(stone_map_.getTurn() == Stone::UpOrDown::Up) {
+    if(!game_over_ && stone_map_.getTurn() == Stone::UpOrDown::Up) {
         player_.setStoneMap(stone_map_);
         player_.playAsync();
     }

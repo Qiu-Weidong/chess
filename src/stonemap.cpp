@@ -135,7 +135,7 @@ std::vector<Step> StoneMap::generatePossibleSteps()  {
 }
 
 int StoneMap::evaluate() const {
-    int stone_values[] = { 65536, 248, 256, 448, 1024, 448, 128 };
+    int stone_values[] = { 65536, 248, 256, 512, 1024, 512, 128 };
     int upscore = 0, downscore = 0;
 
     // 子力评估
@@ -145,6 +145,56 @@ int StoneMap::evaluate() const {
             downscore += stone_values[(int)stone.stone_type_];
     }
 
+    {
+        // 兵的位置修正
+        const int fix[10][9] = {
+            {  1,  3,  9, 10, 12, 10,  9,  3,  1,}, 
+            { 18, 36, 56, 95,118, 95, 56, 36, 18,},
+            { 15, 28, 42, 73, 80, 73, 42, 28, 15,},
+            { 13, 22, 30, 42, 52, 42, 30, 22, 13,},
+            {  8, 17, 18, 21, 26, 21, 18, 17,  8,},
+            {  3,  0,  7,  0,  8,  0,  7,  0,  3,},
+            { -1,  0, -3,  0,  3,  0, -3,  0, -1,},
+            {  0,  0,  0,  0,  0,  0,  0,  0,  0,},
+            {  0,  0,  0,  0,  0,  0,  0,  0,  0,},
+            {  0,  0,  0,  0,  0,  0,  0,  0,  0,},
+        };
+        const Stone &up_pawn_left = stones_[(int)StoneID::UpPawnLeft];
+        const Stone &up_pawn_midleft = stones_[(int)StoneID::UpPawnMidLeft];
+        const Stone &up_pawn_mid = stones_[(int)StoneID::UpPawnMiddle];
+        const Stone &up_pawn_midright = stones_[(int)StoneID::UpPawnMidRight];
+        const Stone &up_pawn_right = stones_[(int)StoneID::UpPawnRight];
+
+        if(up_pawn_left.alive_) 
+            upscore += fix[9 - up_pawn_left.location_.y][up_pawn_left.location_.x];
+        if(up_pawn_midleft.alive_) 
+            upscore += fix[9 - up_pawn_midleft.location_.y][up_pawn_midleft.location_.x];
+        if(up_pawn_mid.alive_) 
+            upscore += fix[9 - up_pawn_mid.location_.y][up_pawn_mid.location_.x];
+        if(up_pawn_midright.alive_) 
+            upscore += fix[9 - up_pawn_midright.location_.y][up_pawn_midright.location_.x];
+        if(up_pawn_right.alive_) 
+            upscore += fix[9 - up_pawn_right.location_.y][up_pawn_right.location_.x];
+        
+        const Stone &down_pawn_left = stones_[(int)StoneID::DownPawnLeft];
+        const Stone &down_pawn_midleft = stones_[(int)StoneID::DownPawnMidLeft];
+        const Stone &down_pawn_mid = stones_[(int)StoneID::DownPawnMiddle];
+        const Stone &down_pawn_midright = stones_[(int)StoneID::DownPawnMidRight];
+        const Stone &down_pawn_right = stones_[(int)StoneID::DownPawnRight];
+
+        if(down_pawn_left.alive_) 
+            downscore += fix[down_pawn_left.location_.y][down_pawn_left.location_.x];
+        if(down_pawn_midleft.alive_) 
+            downscore += fix[down_pawn_midleft.location_.y][down_pawn_midleft.location_.x];
+        if(down_pawn_mid.alive_) 
+            downscore += fix[down_pawn_mid.location_.y][down_pawn_mid.location_.x];
+        if(down_pawn_midright.alive_) 
+            downscore += fix[down_pawn_midright.location_.y][down_pawn_midright.location_.x];
+        if(down_pawn_right.alive_) 
+            downscore += fix[down_pawn_right.location_.y][down_pawn_right.location_.x];
+        
+    }
+    
     
     return upscore - downscore ;
 }

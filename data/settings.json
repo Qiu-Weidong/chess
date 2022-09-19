@@ -12,7 +12,7 @@
     "board": {
         "img":"img/board.png",
         "background": "img/bg/bg.jpg",
-        "river-index": 3,
+        "river-index": 0,
         "river-url": "img/river.png",
         "box-url": "img/box.png"
     },
@@ -26,7 +26,7 @@
     "choosen-color": "red",
     "icon-url":"img/icon.png",
     "res-dir": "./resource/",
-    "win-url": "img/win/win6.png",
+    "win-url": "img/win/win0.png",
     "jinwen": {
         "url": "img/stone-text/jinwen.png",
         "scale": 0.650,

@@ -41,7 +41,9 @@ public:
             if(map_[i].alive_) cnt++;
         }
 
-        max_depth_ = (92 - cnt) / 10; 
+        // 不应该使用线性来决定搜索深度 
+        const int t = 6;
+        max_depth_ = cnt >= 12 ? t : ( cnt >= 8 ? t+1 : (cnt >= 4 ? t+2 : (cnt >= 2 ? t+3 : t+4) ) ); 
     }
 
     void playAsync() {

@@ -82,13 +82,16 @@ void App::update() {
         box_select_.setPosition(-settings.stone_.radius_, -settings.stone_.radius_);
     }
 
+    std::cout << "&&" << game_.from_.x << ", " << game_.from_.y << std::endl;
     sf::Vector2f from_pos(game_.from_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
                 game_.from_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_ );
     box_from_.setPosition(from_pos);
     sf::Vector2f to_pos(game_.to_.x*(settings.stone_.radius_ << 1) + settings.padding_.left_ + settings.stone_.radius_, 
                 game_.to_.y*(settings.stone_.radius_ << 1) + settings.padding_.top_ + settings.stone_.radius_ );
     box_to_.setPosition(to_pos);
-
+    
+    std::cout << "^^" << game_.from_.x << ", " << game_.from_.y << std::endl;
+    
     auto &stones = game_.getAllStones();
     // 更新棋子坐标
     for(int i=0; i<StoneMap::stone_cnt_; i++) {
@@ -107,6 +110,7 @@ void App::update() {
     if(!game_.isGameOver() && game_.isComputerTurn()) {
         game_.checkComputerStep();
     }
+    std::cout << "**" << game_.from_.x << ", " << game_.from_.y << std::endl;
 }
 
 void App::mouseClickedHandler(sf::Event &event) {
@@ -210,7 +214,7 @@ App::App() {
         sf::Image icon;
         icon.loadFromFile(settings.icon_url_);
         window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-        window_.setFramerateLimit(24);
+        window_.setFramerateLimit(4);
     }
     
     { // 棋盘设置

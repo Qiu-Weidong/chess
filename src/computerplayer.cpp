@@ -6,7 +6,7 @@
 
 
 Step ComputerPlayer::play() {
-    auto t1 = clock();
+    // auto t1 = clock();
     
     memset(history_table_, 0, sizeof(history_table_));
 
@@ -31,8 +31,8 @@ Step ComputerPlayer::play() {
 
     int index = rand() % best_steps.size();
     
-    auto t2 = clock();
-    std::cout << t2 - t1  << std::endl;
+    // auto t2 = clock();
+    // std::cout << t2 - t1  << std::endl;
     return best_steps[index];
 }
 

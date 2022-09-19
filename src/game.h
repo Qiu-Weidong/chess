@@ -42,9 +42,12 @@ public:
     void checkComputerStep() {
         auto &future = player_.getStep();
         std::future_status status = future.wait_for(std::chrono::milliseconds(30));
+        
+        std::cout << "wait for" << std::endl;
         if(status != std::future_status::ready) return;
+        std::cout << "fuck" << std::endl;
 
-        Step step = player_.getStep().get();
+        Step step = future.get();
         step.mover_ = stone_map_.getStoneOnMap(step.from_.x, step.from_.y);
         step.killee_ = stone_map_.getStoneOnMap(step.to_.x, step.to_.y);
         steps_.push(step);

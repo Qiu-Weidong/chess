@@ -9,6 +9,7 @@ struct Step {
     struct { int x, y; } to_;
     Stone *mover_;
     Stone *killee_;
+    int weight_;
 
     Step() = default;
 
@@ -16,6 +17,7 @@ struct Step {
         mover_ = mover; killee_ = killee;
         from_.x = from_x; from_.y = from_y;
         to_.x = to_x; to_.y = to_y;
+        weight_ = 0;
     }
 
     Step(Stone *mover, int dest_x, int dest_y, Stone *killee=nullptr) {
@@ -26,6 +28,7 @@ struct Step {
         to_.x = dest_x;
         to_.y = dest_y;
         killee_ = killee;
+        weight_ = 0;
     }
 };
 #endif // CHESS_STEP_H_

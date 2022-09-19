@@ -5,9 +5,9 @@
 int main(int argc, const char **argv)
 {
     std::ifstream in;
-    if(argc > 1)
-        in.open(argv[1]);
-    // in.open("./settings.json");
+    // if(argc > 1)
+    //     in.open(argv[1]);
+    in.open("./settings.json");
     Settings &settings = Settings::getInstance();
     if(in.is_open()) settings.loadFromFile(in);
     
